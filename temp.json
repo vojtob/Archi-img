@@ -1,0 +1,8 @@
+[
+    { "fileName": "02-Application/AA 01 overview", "icons": [
+        { "x1": 0, "x2": 3, "y1": 0, "y2": 5, "size": 96, "iconName": "desktoppc.png"},
+        { "x1": 0, "x2": 3, "y1": 6, "y2": 12, "size": 96, "iconName": "utilities2.png"},
+        { "x1": 0, "x2": 1, "y1": 14, "y2": 23, "size": 96, "iconName": "desktoppc.png"},
+        { "x1": 2, "x2": 3, "y1": 14, "y2": 23, "size": 96, "iconName": "bigdataanalytics.png"}
+    ]}
+]

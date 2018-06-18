@@ -1,2 +1,2 @@
 # Archi-img
-Doplnenie icon fo archi exported obrazkov
+Doplnenie icon do obrazkov vyexportovanych z archi

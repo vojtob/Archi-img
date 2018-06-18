@@ -1,0 +1,44 @@
+[
+    { "fileName": "01-Business/BA 01 overview", "icons": [
+        { "x1": 2, "x2": 5, "y1": 1, "y2": 4, "size": 64, "iconName": "email.png"},
+        { "x1": 6, "x2": 9, "y1": 1, "y2": 4, "size": 64, "iconName": "cybersecurity.png"},
+        { "x1": 10, "x2": 13, "y1": 1, "y2": 4, "size": 64, "iconName": "onservices.png"},
+        { "x1": 14, "x2": 17, "y1": 1, "y2": 4, "size": 64, "iconName": "browseexplore.png"},
+        { "x1": 2, "x2": 5, "y1": 10, "y2": 11, "size": 64, "iconName": "nextgennetworks.png"},
+        { "x1": 2, "x2": 5, "y1": 12, "y2": 13, "size": 64, "iconName": "industrysolutions.png"}
+    ]},
+    { "fileName": "01-Business/BA 02a pristup podnikatel", "icons": [
+        { "x1": 3, "x2": 4, "y1": 1, "y2": 5, "size": 80, "iconName": "consulting.png", "coefy":0.65},
+        { "x1": 3, "x2": 4, "y1": 6, "y2": 11, "size": 80, "iconName": "desktoppc.png", "coefy":0.65},
+        { "x1": 3, "x2": 4, "y1": 12, "y2": 16, "size": 80, "iconName": "pitalmarkets.png", "coefy":0.65},
+        { "x1": 3, "x2": 4, "y1": 17, "y2": 18, "size": 80, "iconName": "blogpost.png", "coefy":0.55}
+    ]},
+    { "fileName": "01-Business/BA 03b pristup konzument", "icons": [
+        { "x1": 1, "x2": 2, "y1": 1, "y2": 6, "size": 80, "iconName": "desktoppc.png", "coefy":0.65},
+        { "x1": 1, "x2": 2, "y1": 8, "y2": 14, "size": 80, "iconName": "utilities2.png", "coefy":0.65},
+        { "x1": 1, "x2": 2, "y1": 15, "y2": 19, "size": 80, "iconName": "download.png", "coefy":0.65}
+    ]},
+    { "fileName": "02-Application/AA 01 overview", "icons": [
+        { "x1": 0, "x2": 3, "y1": 0, "y2": 5, "size": 96, "iconName": "desktoppc.png"},
+        { "x1": 0, "x2": 3, "y1": 6, "y2": 12, "size": 96, "iconName": "utilities2.png"},
+        { "x1": 0, "x2": 1, "y1": 14, "y2": 23, "size": 96, "iconName": "desktoppc.png"},
+        { "x1": 2, "x2": 3, "y1": 14, "y2": 23, "size": 96, "iconName": "bigdataanalytics.png"}
+    ]},
+    { "fileName": "02-Application/AA 02a detail empty", "icons": [
+        { "x1": 0, "x2": 3, "y1": 0, "y2": 1, "size": 48, "iconName": "finanicalservices.png"},
+        { "x1": 5, "x2": 8, "y1": 0, "y2": 1, "size": 48, "iconName": "communities.png"},
+        { "x1": 0, "x2": 1, "y1": 2, "y2": 3, "size": 48, "iconName": "consulting.png"},
+        { "x1": 2, "x2": 3, "y1": 2, "y2": 3, "size": 48, "iconName": "cybersecurity.png"},
+        { "x1": 5, "x2": 6, "y1": 2, "y2": 3, "size": 48, "iconName": "nextgennetworks.png"},
+        { "x1": 7, "x2": 8, "y1": 2, "y2": 3, "size": 48, "iconName": "onservices.png"},
+        { "x1": 0, "x2": 1, "y1": 5, "y2": 6, "size": 48, "iconName": "consulting.png", "coefy":0.60},
+        { "x1": 0, "x2": 1, "y1": 7, "y2": 10, "size": 48, "iconName": "publicsector.png"},
+        { "x1": 0, "x2": 1, "y1": 11, "y2": 12, "size": 48, "iconName": "industrysolutions.png"},
+        { "x1": 2, "x2": 3, "y1": 5, "y2": 6, "size": 48, "iconName": "cybersecurity.png", "coefy":0.60},
+        { "x1": 5, "x2": 6, "y1": 5, "y2": 6, "size": 48, "iconName": "nextgennetworks.png", "coefy":0.60},
+        { "x1": 2, "x2": 6, "y1": 11, "y2": 12, "size": 48, "iconName": "industrysolutions.png"},
+        { "x1": 7, "x2": 8, "y1": 5, "y2": 6, "size": 48, "iconName": "onservices.png", "coefy":0.60},
+        { "x1": 7, "x2": 8, "y1": 9, "y2": 10, "size": 32, "iconName": "reinsurance.png", "coefy":0.65},
+        { "x1": 7, "x2": 8, "y1": 11, "y2": 12, "size": 48, "iconName": "maintenancerepair.png"}
+	]}
+]
