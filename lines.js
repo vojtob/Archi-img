@@ -30,7 +30,7 @@ fs.readFile(config.imagesFile, 'utf8', function (err, data) {
             var imgRed = img.clone();
             imgRed = addRedLinesToImage(imgRed, horizontalLines, true);
             imgRed = addRedLinesToImage(imgRed, verticalLines, false);
-            imgRed.write(imageDef.fileName + "_red.png");
+            imgRed.write('temp/' + imageDef.fileName + "_red.png");
 
             // generate composition
             addIcon2Image(imageDef, img, 0, verticalLines, horizontalLines);
