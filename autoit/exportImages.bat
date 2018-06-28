@@ -1,0 +1,1 @@
+call "C:\Program Files (x86)\AutoIt3\AutoIt3_x64.exe" exportImages.au3
