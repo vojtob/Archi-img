@@ -1,20 +1,22 @@
 var fs = require('fs');
 var Jimp = require("jimp");
-var config = require('./config');
+var projectDir = process.argv[2];
+var config = require(projectDir + '/Architecture_src/utils/config/config');
+// var config = require('config/config');
 
 var imagesCount = 0;
 var processedImages = 0;
 
 console.log(config.imagesFile);
 
-fs.readFile(config.imagesFile, 'utf8', function (err, data) {
+fs.readFile('config/' + config.imagesFile, 'utf8', function (err, data) {
     if (err) throw err;
     var imageDefs = JSON.parse(data);
     imagesCount = imageDefs.length;
 
     imageDefs.forEach(imageDef => {
         console.log('start processing image ' + imageDef.fileName);
-        Jimp.read(config.filePrefix + imageDef.fileName + ".png", function (err, img) {
+        Jimp.read(projectDir + '/Architecture_temp/exported/' + imageDef.fileName + ".png", function (err, img) {
             if (err) throw err;
             // console.log(img);
 
@@ -42,7 +44,7 @@ function processedImage(imageDef, img) {
 function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines, rectangles) {
     if (iconIndex == imageDef.icons.length) {
         // vsetky pridane, uloz obrazok
-        img.write(config.filePrefix + imageDef.fileName + "_i.png", function (err, img) {
+        img.write(projectDir + '/Architecture/' + imageDef.fileName + ".png", function (err, img) {
             console.log((++processedImages) + '/' + imagesCount + "  DONE image " + imageDef.fileName);
             if (processedImages == imagesCount) {
                 console.log("ALL IMAGES PROCESSED, DONE")
@@ -238,7 +240,7 @@ function addGrayLinesToImage(img, imageDef, horizontalLines, verticalLines) {
         }
     });
 
-    imgLines.write('temp/' + imageDef.fileName + "_lines.png");
+    imgLines.write('../../Architecture_temp/lines/' + imageDef.fileName + "_lines.png");
 }
 
 // function addRedSegmentsToImage(img, segments) {
@@ -280,17 +282,13 @@ function addGreenRectangles(img, imageDef, rectangles) {
             imgRec.print(font, rectangle[0] + config.offset, rectangle[1] + config.offset, recCounter.toString());
             recCounter++;
         });
-        imgRec.write('temp/' + imageDef.fileName + "_rec.png");
+        imgRec.write('../../Architecture_temp/lines/' + imageDef.fileName + "_rec.png");
     });
 }
 
 function testLineXY(x, y, img) {
     var c = Jimp.intToRGBA(img.getPixelColor(x, y));
     var intensity = c.r * c.r + c.g * c.g + c.b * c.b;
-    // if ((x == 126) && (y == 230)) {
-    //     console.log(c);
-    //     console.log(intensity);
-    // }
     return ((c.a == 255) && (intensity < 50000));
     // return ((c.r == 0 && c.g == 0 && c.b == 0 && c.a == 255) || (c.r == 102 && c.g == 102 && c.b == 102 && c.a == 255));
 }
