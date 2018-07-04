@@ -1,7 +1,7 @@
 var fs = require('fs');
 var Jimp = require("jimp");
 var projectDir = process.argv[2];
-var config = require(projectDir + '/Architecture_src/utils/config/config');
+var config = require(projectDir + '/Architecture_src/model/config');
 // var config = require('config/config');
 
 var imagesCount = 0;
@@ -9,7 +9,7 @@ var processedImages = 0;
 
 console.log(config.imagesFile);
 
-fs.readFile('config/' + config.imagesFile, 'utf8', function (err, data) {
+fs.readFile(projectDir + '/Architecture_src/model/' + config.imagesFile, 'utf8', function (err, data) {
     if (err) throw err;
     var imageDefs = JSON.parse(data);
     imagesCount = imageDefs.length;
@@ -20,12 +20,12 @@ fs.readFile('config/' + config.imagesFile, 'utf8', function (err, data) {
             if (err) throw err;
             // console.log(img);
 
-            processedImage(imageDef, img);
+            processImage(imageDef, img);
         });
     });
 });
 
-function processedImage(imageDef, img) {
+function processImage(imageDef, img) {
     // identify lines and rectangles
     var imgGray = img.clone();
     imgGray = imgGray.grayscale();
@@ -94,7 +94,7 @@ function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines,
     }
 
     // read icon file
-    Jimp.read(config.iconPrefix + iconDef.iconName, function (err, iconImage) {
+    Jimp.read(projectDir + '/resources/icons/' + iconDef.iconName, function (err, iconImage) {
         if (err) {
             console.log(err);
             throw err;
@@ -240,7 +240,7 @@ function addGrayLinesToImage(img, imageDef, horizontalLines, verticalLines) {
         }
     });
 
-    imgLines.write('../../Architecture_temp/lines/' + imageDef.fileName + "_lines.png");
+    imgLines.write(projectDir + '/Architecture_temp/lines/' + imageDef.fileName + "_lines.png");
 }
 
 // function addRedSegmentsToImage(img, segments) {
@@ -282,7 +282,7 @@ function addGreenRectangles(img, imageDef, rectangles) {
             imgRec.print(font, rectangle[0] + config.offset, rectangle[1] + config.offset, recCounter.toString());
             recCounter++;
         });
-        imgRec.write('../../Architecture_temp/lines/' + imageDef.fileName + "_rec.png");
+        imgRec.write(projectDir + '/Architecture_temp/lines/' + imageDef.fileName + "_rec.png");
     });
 }
 

@@ -8,4 +8,4 @@ Očakávaný postup je takýto:
   1. pre každý definovaný súbor vygeneruje <subor>_lines.png, kde sú naznačené všetky čiary identifikované v obrázku. To pomáha zistiť zarovnanie. Súbory skončia v adresári Architecture_temp/
   2. pre každý definovaný súbor vygeneruje <subor>_rec.png, kde sú označené všetky identifiované obdĺžniky s číslami, aby sa podľa toho dali doplniť ikony. Súbory skončia v adresári Architecture_temp/
   3. Do obrázku doplní ikony (ak sú nejaké definované)
-  4. Obrázok s doplnenými ikonami uloží do adresára Architecture
+  4. Obrázok s doplnenými ikonami uloží do adresára
