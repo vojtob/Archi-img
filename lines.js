@@ -1,6 +1,8 @@
 var fs = require('fs');
 var Jimp = require("jimp");
 var projectDir = process.argv[2];
+var exportDir = projectDir;
+if (process.argv.length > 3) exportDir = process.argv[3];
 var config = require(projectDir + '/Architecture_src/model/config');
 // var config = require('config/config');
 
@@ -44,7 +46,7 @@ function processImage(imageDef, img) {
 function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines, rectangles) {
     if (iconIndex == imageDef.icons.length) {
         // vsetky pridane, uloz obrazok
-        img.write(projectDir + '/Architecture/' + imageDef.fileName + ".png", function (err, img) {
+        img.write(exportDir + '/Architecture/' + imageDef.fileName + ".png", function (err, img) {
             console.log((++processedImages) + '/' + imagesCount + "  DONE image " + imageDef.fileName);
             if (processedImages == imagesCount) {
                 console.log("ALL IMAGES PROCESSED, DONE")
