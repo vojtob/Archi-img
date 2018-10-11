@@ -31,8 +31,8 @@ function processImage(imageDef, img) {
     // identify lines and rectangles
     var imgGray = img.clone();
     imgGray = imgGray.grayscale();
-    var verticalLines = identifyLines(imgGray, false)
-    var horizontalLines = identifyLines(imgGray, true)
+    var verticalLines = identifyLines(imgGray, false);
+    var horizontalLines = identifyLines(imgGray, true);
     var rectangles = identifyRectangles(horizontalLines, verticalLines);
 
     // produce helper files
