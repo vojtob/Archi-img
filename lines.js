@@ -47,7 +47,11 @@ function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines,
     if (iconIndex == imageDef.icons.length) {
         // vsetky pridane, uloz obrazok
         img.write(exportDir + '/Architecture/' + imageDef.fileName + ".png", function (err, img) {
-            console.log((++processedImages) + '/' + imagesCount + "  DONE image " + imageDef.fileName);
+            if(err) {
+                console.log("Problem with image " + imageDef.fileName);
+                console.log(err);
+            }
+            console.log((++processedImages) + '/' + imagesCount + "  DONE image " + exportDir + '/Architecture/' + imageDef.fileName);
             if (processedImages == imagesCount) {
                 console.log("ALL IMAGES PROCESSED, DONE")
             }

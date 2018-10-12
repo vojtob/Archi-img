@@ -21,3 +21,23 @@ Očakávaný postup je takýto:
 | **Architecture**       | Vygenerované, postprocessované, zkopírované súbory, výsledný tvar | áno, toto by sa malo dať celé vygenerovať |
 | Architecture/01-Business, 02-Application, 03-Technology | vygenerované obrázky s doplnenými ikonami | áno, dajú sa nanovo vygenerovať |
 | **Architecture_temp**  | Pomocné súbory pri generovaní             | áno |
+
+## Atribúty obrázkov
+```javascript
+    { "fileName": "01-Business/01 Biznis Overview", "icons": [
+        { "rec": 1, "x": "center", "y": "center", "size": 128, "iconName": "lifecycle.png"},
+        { "rec": 2, "x": "left", "y": "top", "size": 96, "iconName": "notar.png"},
+        { "rec": 3, "x": "right", "y": 0.7, "size": 96, "iconName": "businessoutcomes.png"}
+    ]},
+```
+
+| Atribút                | Význam                                                  |
+| -----------------------|-------------------------------------------------------- |
+| fileName | Cesta k súboru v Architecture_temp, do tohto obrázka sa doplnia ikony |
+| rec      | Číslo obdlžnika, z image_rec |
+| x        | Kam sa umiestni ikona. Možné hodnoty sú left/center/right alebo koeficient napr. 0.2 |
+| y        | Kam sa umiestni ikona. Možné hodnoty sú top/center/bottom alebo koeficient napr. 0.2 |
+| size     | veľkosť v pixeloch, definuje to width (šírku), výška sa prispôsobí |
+
+
+
