@@ -1,0 +1,15 @@
+[
+    { "fileName": "02-Application/11 App komponenty", "icons": [
+        { "rec": 9, "x": "center", "y": "center", "size": 50, "iconName": "lifecycle.png"},
+        { "rec": 10, "x": "center", "y": "center", "size": 50, "iconName": "notar.png"},
+        { "rec": 11, "x": "center", "y": "center", "size": 50, "iconName": "teamwork.png"},
+        { "rec": 12, "x": "left", "y": "top", "size": 25, "iconName": "productivity.png"},
+        { "rec": 13, "x": "center", "y": "center", "size": 50, "iconName": "peopleskills.png"},
+        { "rec": 14, "x": "center", "y": "center", "size": 50, "iconName": "blogpost.png"},
+        { "rec": 15, "x": "center", "y": "center", "size": 50, "iconName": "calendar.png"},
+        { "rec": 16, "x": "center", "y": "center", "size": 50, "iconName": "directory.png"},
+        { "rec": 17, "x": "center", "y": "center", "size": 30, "iconName": "growth.png"},
+        { "rec": 18, "x": "center", "y": "center", "size": 50, "iconName": "nextgennetworks.png"},
+        { "rec": 19, "x": "left", "y": "top", "size": 25, "iconName": "nextgennetworks.png"}
+	]}
+]

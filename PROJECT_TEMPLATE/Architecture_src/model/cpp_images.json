@@ -1,0 +1,49 @@
+[
+    { "fileName": "01-Business/01 Biznis Overview", "icons": [
+        { "rec": 1, "x": "center", "y": "center", "size": 80, "iconName": "lifecycle.png"},
+        { "rec": 2, "x": "center", "y": "center", "size": 80, "iconName": "notar.png"},
+        { "rec": 3, "x": "center", "y": 0.57, "size": 64, "iconName": "businessoutcomes.png"},
+        { "rec": 4, "x": "center", "y": 0.6, "size": 80, "iconName": "teamwork.png"}
+    ]},
+    { "fileName": "01-Business/02 Biznis služby", "icons": [
+        { "rec": 1, "x": "center", "y": "bottom", "size": 24, "iconName": "lifecycle.png"},
+        { "rec": 2, "x": "center", "y": "bottom", "size": 24, "iconName": "notar.png"},
+        { "rec": 3, "x": 1.13, "y": "bottom", "size": 24, "iconName": "businessoutcomes.png"},
+        { "rec": 25, "x": "left", "y": "bottom", "size": 24, "iconName": "teamwork.png"},
+        { "rec": 26, "x": "center", "y": "bottom", "size": 24, "iconName": "peopleskills.png"}
+	]},
+    { "fileName": "02-Application/10 App vrstvy", "icons": [
+        { "rec": 1, "x": 0.35, "y": "center", "size": 80, "iconName": "lifecycle.png"},
+        { "rec": 1, "x": 0.65, "y": "center", "size": 80, "iconName": "notar.png"},
+        { "rec": 2, "x": "center", "y": "center", "size": 80, "iconName": "teamwork.png"},
+        { "rec": 3, "x": "center", "y": "center", "size": 80, "iconName": "productivity.png"},
+        { "rec": 4, "x": "center", "y": "center", "size": 50, "iconName": "nextgennetworks.png"}
+	]},
+    { "fileName": "02-Application/11 App komponenty", "icons": [
+        { "rec": 9, "x": "center", "y": "center", "size": 50, "iconName": "lifecycle.png"},
+        { "rec": 10, "x": "center", "y": "center", "size": 50, "iconName": "notar.png"},
+        { "rec": 11, "x": "center", "y": "center", "size": 50, "iconName": "teamwork.png"},
+        { "rec": 12, "x": "left", "y": "top", "size": 25, "iconName": "productivity.png"},
+        { "rec": 13, "x": "center", "y": "center", "size": 50, "iconName": "peopleskills.png"},
+        { "rec": 14, "x": "center", "y": "center", "size": 50, "iconName": "blogpost.png"},
+        { "rec": 15, "x": "center", "y": "center", "size": 50, "iconName": "calendar.png"},
+        { "rec": 16, "x": "center", "y": "center", "size": 50, "iconName": "directory.png"},
+        { "rec": 17, "x": "center", "y": 0.6, "size": 30, "iconName": "growth.png"},
+        { "rec": 18, "x": "center", "y": "center", "size": 50, "iconName": "nextgennetworks.png"},
+        { "rec": 19, "x": "left", "y": "top", "size": 25, "iconName": "nextgennetworks.png"}
+	]},
+    { "fileName": "02-Application/12 App detail", "icons": [
+        { "rec": 9, "x": "left", "y": "top", "size": 25, "iconName": "lifecycle.png"},
+        { "rec": 10, "x": "left", "y": "top", "size": 25, "iconName": "notar.png"},
+        { "rec": 11, "x": "left", "y": "top", "size": 25, "iconName": "teamwork.png"},
+        { "rec": 22, "x": "left", "y": "top", "size": 25, "iconName": "productivity.png"},
+        { "rec": 23, "x": "center", "y": "center", "size": 25, "iconName": "peopleskills.png"},
+        { "rec": 24, "x": "center", "y": "center", "size": 25, "iconName": "blogpost.png"},
+        { "rec": 25, "x": "center", "y": "center", "size": 25, "iconName": "calendar.png"},
+        { "rec": 26, "x": "center", "y": "center", "size": 25, "iconName": "directory.png"},
+        { "rec": 27, "x": "center", "y": "bottom", "size": 25, "iconName": "contactus.png"},
+        { "rec": 28, "x": "center", "y": "bottom", "size": 25, "iconName": "growth.png"},
+        { "rec": 31, "x": "center", "y": "center", "size": 25, "iconName": "nextgennetworks.png"},
+        { "rec": 40, "x": "left", "y": "top", "size": 25, "iconName": "nextgennetworks.png"}
+	]}
+]

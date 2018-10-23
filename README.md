@@ -40,4 +40,20 @@ Očakávaný postup je takýto:
 | size     | veľkosť v pixeloch, definuje to width (šírku), výška sa prispôsobí |
 
 
+## Viacjazyčnosť
+Ak chcem mať model v slovenčine aj angličtine, tak využijem properties jednotlivých elementov
+SK_name je slovenský názov, EN_name anglický. Každý element má (v XML) atribút name, ktorý sa používa v obrázkoch.
+Manipulovanie s názvami je nebezpečné, ľahko je to náchylné na to, že si prepíšem, čo som nechcel ... treba pred tým commitnúť.
 
+| Príkaz | Význam |
+|--------|--------|
+| saveSK | Predpokladá, že som teraz používal model v slovenčine. Uloží všetky element@name do @SK_name. Takže predpokladá, že názvy sú po slovensky a zapamätá si ich do slovenského šuflíčka. |
+| saveEN | Predpokladá, že som teraz používal model v angličtine. Uloží všetky element@name do @EN_name. Takže predpokladá, že názvy sú po anglicky a zapamätá si ich do anglického šuflíčka. |
+| useSK | Je jedno, aké sú aktuálne názvy, či slovensky alebo anglicky. Hovorím, že chcem prejsť do slovenčiny a tak vyberie slovenský šuflík a všetky názvy si nastaví podľa neho. Do element@name nastaví @SK_name. |
+| useEN | Je jedno, aké sú aktuálne názvy, či slovensky alebo anglicky. Hovorím, že chcem prejsť do anlgičtiny a tak vyberie anglický šuflík a všetky názvy si nastaví podľa neho. Do element@name nastaví @EN_name. |
+
+Ak sa chcem prepnúť do angličtiny, tak by som mal 
+* saveSK aby som nestratil slovenské názvy, ktoré som upravil
+* useEN aby sa načítali anglické názvy
+
+A podobne pri prechode z angličtiny do slovenčiny saveEN, useSK
