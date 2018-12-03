@@ -64,40 +64,46 @@ function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines,
     var x = 0;
     var y = 0;
 
-    if (iconDef.rec) {
-        // defined by rectangle
-        var rec = rectangles[iconDef.rec - 1];
-        if (iconDef.x == "left") {
-            x = rec[0] + config.offset;
-        } else if (iconDef.x == "right") {
-            x = rec[2] - config.offset - iconDef.size;
-        } else if (iconDef.x == "center") {
-            x = (rec[2] + rec[0] - iconDef.size) / 2;
-        } else {
-            x = Math.floor((1 - iconDef.x) * rec[0] + iconDef.x * rec[2] - 0.5 * iconDef.size);
-        }
-        if (iconDef.y == "top") {
-            y = rec[1] + config.offset;
-        } else if (iconDef.y == "bottom") {
-            y = rec[3] - config.offset - iconDef.size;
-        } else if (iconDef.y == "center") {
-            y = (rec[3] + rec[1] - iconDef.size) / 2;
-        } else {
-            y = Math.floor((1 - iconDef.y) * rec[1] + iconDef.y * rec[3] - 0.5 * iconDef.size);
-        }
-    } else {
-        // defined by lines
-        if (iconDef.coefx) {
-            x = Math.floor((1 - iconDef.coefx) * verticalLines[iconDef.x1] + iconDef.coefx * verticalLines[iconDef.x2] - 0.5 * iconDef.size);
-        } else {
-            x = Math.floor(0.5 * verticalLines[iconDef.x1] + 0.5 * verticalLines[iconDef.x2] - 0.5 * iconDef.size);
-        }
-        if (iconDef.coefy) {
-            y = Math.floor((1 - iconDef.coefy) * horizontalLines[iconDef.y1] + iconDef.coefy * horizontalLines[iconDef.y2] - 0.5 * iconDef.size);
-        } else {
-            y = Math.floor(0.5 * horizontalLines[iconDef.y1] + 0.5 * horizontalLines[iconDef.y2] - 0.5 * iconDef.size);
-        }
-    }
+	try{
+		if (iconDef.rec) {
+			// defined by rectangle
+			var rec = rectangles[iconDef.rec - 1];
+			if (iconDef.x == "left") {
+				x = rec[0] + config.offset;
+			} else if (iconDef.x == "right") {
+				x = rec[2] - config.offset - iconDef.size;
+			} else if (iconDef.x == "center") {
+				x = (rec[2] + rec[0] - iconDef.size) / 2;
+			} else {
+				x = Math.floor((1 - iconDef.x) * rec[0] + iconDef.x * rec[2] - 0.5 * iconDef.size);
+			}
+			if (iconDef.y == "top") {
+				y = rec[1] + config.offset;
+			} else if (iconDef.y == "bottom") {
+				y = rec[3] - config.offset - iconDef.size;
+			} else if (iconDef.y == "center") {
+				y = (rec[3] + rec[1] - iconDef.size) / 2;
+			} else {
+				y = Math.floor((1 - iconDef.y) * rec[1] + iconDef.y * rec[3] - 0.5 * iconDef.size);
+			}
+		} else {
+			// defined by lines
+			if (iconDef.coefx) {
+				x = Math.floor((1 - iconDef.coefx) * verticalLines[iconDef.x1] + iconDef.coefx * verticalLines[iconDef.x2] - 0.5 * iconDef.size);
+			} else {
+				x = Math.floor(0.5 * verticalLines[iconDef.x1] + 0.5 * verticalLines[iconDef.x2] - 0.5 * iconDef.size);
+			}
+			if (iconDef.coefy) {
+				y = Math.floor((1 - iconDef.coefy) * horizontalLines[iconDef.y1] + iconDef.coefy * horizontalLines[iconDef.y2] - 0.5 * iconDef.size);
+			} else {
+				y = Math.floor(0.5 * horizontalLines[iconDef.y1] + 0.5 * horizontalLines[iconDef.y2] - 0.5 * iconDef.size);
+			}
+		}		
+	} catch (ex) {
+		console.log("!!!! Problem processing file: " + imageDef.fileName + "  icon: " + iconDef.iconName);
+		console.log(ex);
+		throw ex;
+	}
 
     // read icon file
     Jimp.read(projectDir + '/resources/icons/' + iconDef.iconName, function (err, iconImage) {
