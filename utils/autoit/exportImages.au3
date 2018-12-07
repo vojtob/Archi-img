@@ -54,10 +54,10 @@ Func exportImage($itemID, $itemName)
 	; select item
 	ControlFocus($hWnd, "", "[CLASS:SysTreeView32; INSTANCE:1]");
 	ControlTreeView($hWnd, "", "[CLASS:SysTreeView32; INSTANCE:1]", "Select", $itemID);
-	Sleep(100);
+	Sleep(200);
 	; open view
 	Send("{ENTER}");
-	Sleep(500);
+	Sleep(600);
 	; open export dialog
 	Send("!fe{UP}{ENTER}");
 	; fill export data

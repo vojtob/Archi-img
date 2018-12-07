@@ -22,4 +22,13 @@
 		</xsl:copy>
 	</xsl:template>
 
+	<xsl:template match="bendpoint">
+		<xsl:copy><!-- skopiruj element a zatial nic viac -->
+			<xsl:attribute name="startX"><xsl:value-of select="round(@startX div 5) * 5"/></xsl:attribute>
+			<xsl:attribute name="startY"><xsl:value-of select="round(@startY div 5) * 5"/></xsl:attribute>
+			<xsl:attribute name="endX"><xsl:value-of select="round(@endX div 5) * 5"/></xsl:attribute>
+			<xsl:attribute name="endY"><xsl:value-of select="round(@endY div 5) * 5"/></xsl:attribute>
+		</xsl:copy>
+	</xsl:template>
+	
 </xsl:stylesheet>
