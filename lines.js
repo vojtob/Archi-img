@@ -40,7 +40,9 @@ function processImage(imageDef, img) {
     addGreenRectangles(img, imageDef, rectangles);
 
     // generate composition
-    addIcon2Image(img, imageDef, 0, verticalLines, horizontalLines, rectangles);
+    if(config.addIcons) {
+        addIcon2Image(img, imageDef, 0, verticalLines, horizontalLines, rectangles);
+    }
 }
 
 function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines, rectangles) {
