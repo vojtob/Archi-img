@@ -4,28 +4,36 @@ var projectDir = process.argv[2];
 var exportDir = projectDir;
 if (process.argv.length > 3) exportDir = process.argv[3];
 var config = require(projectDir + '/Architecture_src/model/config');
-// var config = require('config/config');
+var resolution = require("screen-resolution");
+var sizeCoef = 1.0;
 
 var imagesCount = 0;
 var processedImages = 0;
 
 console.log(config.imagesFile);
 
-fs.readFile(projectDir + '/Architecture_src/model/' + config.imagesFile, 'utf8', function (err, data) {
-    if (err) throw err;
-    var imageDefs = JSON.parse(data);
-    imagesCount = imageDefs.length;
-
-    imageDefs.forEach(imageDef => {
-        console.log('start processing image ' + imageDef.fileName);
-        Jimp.read(projectDir + '/Architecture_temp/exported/' + imageDef.fileName + ".png", function (err, img) {
-            if (err) throw err;
-            // console.log(img);
-
-            processImage(imageDef, img);
+resolution.get().then(result => setupResolution(result));
+function setupResolution(res) {
+    console.log(res);
+    if(res.width == 1280) {
+        sizeCoef = 2.0;
+    }
+    fs.readFile(projectDir + '/Architecture_src/model/' + config.imagesFile, 'utf8', function (err, data) {
+        if (err) throw err;
+        var imageDefs = JSON.parse(data);
+        imagesCount = imageDefs.length;
+    
+        imageDefs.forEach(imageDef => {
+            console.log('start processing image ' + imageDef.fileName);
+            Jimp.read(projectDir + '/Architecture_temp/exported/' + imageDef.fileName + ".png", function (err, img) {
+                if (err) throw err;
+                // console.log(img);
+    
+                processImage(imageDef, img);
+            });
         });
     });
-});
+}
 
 function processImage(imageDef, img) {
     // identify lines and rectangles
@@ -71,34 +79,34 @@ function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines,
 			// defined by rectangle
 			var rec = rectangles[iconDef.rec - 1];
 			if (iconDef.x == "left") {
-				x = rec[0] + config.offset;
+				x = rec[0] + config.offset*sizeCoef;
 			} else if (iconDef.x == "right") {
-				x = rec[2] - config.offset - iconDef.size;
+				x = rec[2] - config.offset*sizeCoef - iconDef.size*sizeCoef;
 			} else if (iconDef.x == "center") {
-				x = (rec[2] + rec[0] - iconDef.size) / 2;
+				x = (rec[2] + rec[0] - iconDef.size*sizeCoef) / 2;
 			} else {
-				x = Math.floor((1 - iconDef.x) * rec[0] + iconDef.x * rec[2] - 0.5 * iconDef.size);
+				x = Math.floor((1 - iconDef.x) * rec[0] + iconDef.x * rec[2] - 0.5 * iconDef.size*sizeCoef);
 			}
 			if (iconDef.y == "top") {
-				y = rec[1] + config.offset;
+				y = rec[1] + config.offset*sizeCoef;
 			} else if (iconDef.y == "bottom") {
-				y = rec[3] - config.offset - iconDef.size;
+				y = rec[3] - config.offset*sizeCoef - iconDef.size*sizeCoef;
 			} else if (iconDef.y == "center") {
-				y = (rec[3] + rec[1] - iconDef.size) / 2;
+				y = (rec[3] + rec[1] - iconDef.size*sizeCoef) / 2;
 			} else {
-				y = Math.floor((1 - iconDef.y) * rec[1] + iconDef.y * rec[3] - 0.5 * iconDef.size);
+				y = Math.floor((1 - iconDef.y) * rec[1] + iconDef.y * rec[3] - 0.5 * iconDef.size*sizeCoef);
 			}
 		} else {
 			// defined by lines
 			if (iconDef.coefx) {
-				x = Math.floor((1 - iconDef.coefx) * verticalLines[iconDef.x1] + iconDef.coefx * verticalLines[iconDef.x2] - 0.5 * iconDef.size);
+				x = Math.floor((1 - iconDef.coefx) * verticalLines[iconDef.x1] + iconDef.coefx * verticalLines[iconDef.x2] - 0.5 * iconDef.size*sizeCoef);
 			} else {
-				x = Math.floor(0.5 * verticalLines[iconDef.x1] + 0.5 * verticalLines[iconDef.x2] - 0.5 * iconDef.size);
+				x = Math.floor(0.5 * verticalLines[iconDef.x1] + 0.5 * verticalLines[iconDef.x2] - 0.5 * iconDef.size*sizeCoef);
 			}
 			if (iconDef.coefy) {
-				y = Math.floor((1 - iconDef.coefy) * horizontalLines[iconDef.y1] + iconDef.coefy * horizontalLines[iconDef.y2] - 0.5 * iconDef.size);
+				y = Math.floor((1 - iconDef.coefy) * horizontalLines[iconDef.y1] + iconDef.coefy * horizontalLines[iconDef.y2] - 0.5 * iconDef.size*sizeCoef);
 			} else {
-				y = Math.floor(0.5 * horizontalLines[iconDef.y1] + 0.5 * horizontalLines[iconDef.y2] - 0.5 * iconDef.size);
+				y = Math.floor(0.5 * horizontalLines[iconDef.y1] + 0.5 * horizontalLines[iconDef.y2] - 0.5 * iconDef.size*sizeCoef);
 			}
 		}		
 	} catch (ex) {
@@ -116,7 +124,7 @@ function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines,
         // console.log('read icon image : ' + iconPrefix + iconDef.iconName);
 
         // resize icon to defined size
-        iconImage.resize(iconDef.size, Jimp.AUTO, function (err, iconImage) {
+        iconImage.resize(iconDef.size*sizeCoef, Jimp.AUTO, function (err, iconImage) {
             if (err) {
                 console.log(err);
                 throw err;
