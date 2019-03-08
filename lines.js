@@ -50,7 +50,9 @@ function processImage(imageDef, img) {
     // generate composition
     if(config.addIcons) {
         addIcon2Image(img, imageDef, 0, verticalLines, horizontalLines, rectangles);
-    }
+    } else {
+		console.log("do not add icons")
+	}
 }
 
 function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines, rectangles) {
@@ -121,7 +123,7 @@ function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines,
             console.log(err);
             throw err;
         }
-        // console.log('read icon image : ' + iconPrefix + iconDef.iconName);
+        // console.log('read icon image : ' + iconDef.iconName);
 
         // resize icon to defined size
         iconImage.resize(iconDef.size*sizeCoef, Jimp.AUTO, function (err, iconImage) {
