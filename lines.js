@@ -15,9 +15,13 @@ console.log(config.imagesFile);
 resolution.get().then(result => setupResolution(result));
 function setupResolution(res) {
     console.log(res);
-    if(res.width == 1280) {
+    if(res.width < 1300) {
         sizeCoef = 2.0;
-    }
+		config.squareDelta = 30;
+    } else {
+        sizeCoef = 1.0;		
+		config.squareDelta = 10;
+	}
     fs.readFile(projectDir + '/Architecture_src/model/' + config.imagesFile, 'utf8', function (err, data) {
         if (err) throw err;
         var imageDefs = JSON.parse(data);
