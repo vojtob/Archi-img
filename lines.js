@@ -5,34 +5,57 @@ var exportDir = projectDir;
 if (process.argv.length > 3) exportDir = process.argv[3];
 var config = require(projectDir + '/Architecture_src/model/config');
 var resolution = require("screen-resolution");
-var sizeCoef = 1.0;
 
 var imagesCount = 0;
 var processedImages = 0;
 
-console.log(config.imagesFile);
+// setup resolution, line width, scale, ... 
+// calibration based on standard image Calibration.png
+Jimp.read(projectDir + '/Architecture_temp/exported/Calibration.png', function (err, img) {
+    if (err) throw err;
 
-resolution.get().then(result => setupResolution(result));
-function setupResolution(res) {
-    console.log(res);
-    if(res.width < 1300) {
-        sizeCoef = 2.0;
-		config.squareDelta = 30;
+    // temporary config for calibration
+    console.log('Calibration (setup scale). Calibration image size: ' + img.bitmap.width + " x " + img.bitmap.height);
+    config.minLength = img.bitmap.height / 3;
+    config.delta = img.bitmap.height / 5;
+    // console.log(config);
+    
+    var imgGray = img.clone();
+    imgGray = imgGray.grayscale();
+    var verticalLines = identifyLines(imgGray, false);
+    var horizontalLines = identifyLines(imgGray, true);
+    var rectangles = identifyRectangles(horizontalLines, verticalLines);
+    if(rectangles.length != 1) {
+        console.log("Not calibrated, rectangles size: " + rectangles.length);
     } else {
-        sizeCoef = 1.0;		
-		config.squareDelta = 10;
-	}
+        // konstanty odvodim od vysky standardneho elementu
+        var h = rectangles[0][3]-rectangles[0][1];
+        config.minLength = Math.floor(h/2);
+        config.delta = Math.floor(h/3);
+        // velkost ikony nastavim tak, aby 64 zodpovedalo stvrtine vysky standardneho elementu
+        config.iconSize = h;
+        config.offset = Math.floor(h/10);
+        console.log("Calibrated");
+        console.log(config);
+        // process other images
+        readFiles();
+    }
+});
+
+function readFiles() {
+    console.log("Processing images from: " + config.imagesFile);
+    
     fs.readFile(projectDir + '/Architecture_src/model/' + config.imagesFile, 'utf8', function (err, data) {
         if (err) throw err;
         var imageDefs = JSON.parse(data);
         imagesCount = imageDefs.length;
-    
+        
         imageDefs.forEach(imageDef => {
             console.log('start processing image ' + imageDef.fileName);
             Jimp.read(projectDir + '/Architecture_temp/exported/' + imageDef.fileName + ".png", function (err, img) {
                 if (err) throw err;
                 // console.log(img);
-    
+                
                 processImage(imageDef, img);
             });
         });
@@ -40,22 +63,28 @@ function setupResolution(res) {
 }
 
 function processImage(imageDef, img) {
-    // identify lines and rectangles
-    var imgGray = img.clone();
-    imgGray = imgGray.grayscale();
-    var verticalLines = identifyLines(imgGray, false);
-    var horizontalLines = identifyLines(imgGray, true);
-    var rectangles = identifyRectangles(horizontalLines, verticalLines);
+    console.log("Analyze image " + imageDef.fileName);
+    if(imageDef.icons.length > 0) {
+        // identify lines and rectangles
+        var imgGray = img.clone();
+        imgGray = imgGray.grayscale();
+        var verticalLines = identifyLines(imgGray, false);
+        // console.log(verticalLines);
+        var horizontalLines = identifyLines(imgGray, true);
+        // console.log(horizontalLines);
+        var rectangles = identifyRectangles(horizontalLines, verticalLines);
+        // console.log(rectangles);
 
-    // produce helper files
-    addGrayLinesToImage(img, imageDef, horizontalLines, verticalLines);
-    addGreenRectangles(img, imageDef, rectangles);
+        // produce helper files
+        addGrayLinesToImage(img, imageDef, horizontalLines, verticalLines);
+        addGreenRectangles(img, imageDef, rectangles);
+    }
 
     // generate composition
+    console.log("Add icons to image " + imageDef.fileName);
     if(config.addIcons) {
         addIcon2Image(img, imageDef, 0, verticalLines, horizontalLines, rectangles);
     } else {
-		console.log("do not add icons")
 	}
 }
 
@@ -73,69 +102,58 @@ function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines,
             }
         });
         return;
-    };
+    }
 
-    const iconDef = imageDef.icons[iconIndex];
-    // set coordinates
-    var x = 0;
-    var y = 0;
 
-	try{
-		if (iconDef.rec) {
-			// defined by rectangle
-			var rec = rectangles[iconDef.rec - 1];
-			if (iconDef.x == "left") {
-				x = rec[0] + config.offset*sizeCoef;
-			} else if (iconDef.x == "right") {
-				x = rec[2] - config.offset*sizeCoef - iconDef.size*sizeCoef;
-			} else if (iconDef.x == "center") {
-				x = (rec[2] + rec[0] - iconDef.size*sizeCoef) / 2;
-			} else {
-				x = Math.floor((1 - iconDef.x) * rec[0] + iconDef.x * rec[2] - 0.5 * iconDef.size*sizeCoef);
-			}
-			if (iconDef.y == "top") {
-				y = rec[1] + config.offset*sizeCoef;
-			} else if (iconDef.y == "bottom") {
-				y = rec[3] - config.offset*sizeCoef - iconDef.size*sizeCoef;
-			} else if (iconDef.y == "center") {
-				y = (rec[3] + rec[1] - iconDef.size*sizeCoef) / 2;
-			} else {
-				y = Math.floor((1 - iconDef.y) * rec[1] + iconDef.y * rec[3] - 0.5 * iconDef.size*sizeCoef);
-			}
-		} else {
-			// defined by lines
-			if (iconDef.coefx) {
-				x = Math.floor((1 - iconDef.coefx) * verticalLines[iconDef.x1] + iconDef.coefx * verticalLines[iconDef.x2] - 0.5 * iconDef.size*sizeCoef);
-			} else {
-				x = Math.floor(0.5 * verticalLines[iconDef.x1] + 0.5 * verticalLines[iconDef.x2] - 0.5 * iconDef.size*sizeCoef);
-			}
-			if (iconDef.coefy) {
-				y = Math.floor((1 - iconDef.coefy) * horizontalLines[iconDef.y1] + iconDef.coefy * horizontalLines[iconDef.y2] - 0.5 * iconDef.size*sizeCoef);
-			} else {
-				y = Math.floor(0.5 * horizontalLines[iconDef.y1] + 0.5 * horizontalLines[iconDef.y2] - 0.5 * iconDef.size*sizeCoef);
-			}
-		}		
-	} catch (ex) {
-		console.log("!!!! Problem processing file: " + imageDef.fileName + "  icon: " + iconDef.iconName);
-		console.log(ex);
-		throw ex;
-	}
-
+    var iconDef = imageDef.icons[iconIndex];
     // read icon file
     Jimp.read(projectDir + '/resources/icons/' + iconDef.iconName, function (err, iconImage) {
         if (err) {
             console.log(err);
             throw err;
         }
-        // console.log('read icon image : ' + iconDef.iconName);
+        // console.log('read icon image : ' x+ iconDef.iconName);
+        // console.log(iconImage);
+        // console.log("orig icon size: " + iconImage.bitmap.width + " x " + iconImage.bitmap.height);
 
         // resize icon to defined size
-        iconImage.resize(iconDef.size*sizeCoef, Jimp.AUTO, function (err, iconImage) {
+        iconImage.resize(h = Math.floor(iconDef.size*config.iconSize/64), Jimp.AUTO, function (err, iconImage) {
             if (err) {
                 console.log(err);
                 throw err;
             }
-            // console.log('resized icon image : ' + iconPrefix + iconDef.iconName);
+            // console.log("resized icon size: " + iconImage.bitmap.width + " x " + iconImage.bitmap.height);
+
+            // set coordinates
+            var x = 0;
+            var y = 0;
+        
+            try{
+                // defined by rectangle
+                var rec = rectangles[iconDef.rec - 1];
+                if (iconDef.x == "left") {
+                    x = rec[0] + config.offset;
+                } else if (iconDef.x == "right") {
+                    x = rec[2] - config.offset - iconImage.bitmap.width;
+                } else if (iconDef.x == "center") {
+                    x = (rec[2] + rec[0] - iconImage.bitmap.width) / 2;
+                } else {
+                    x = Math.floor((1 - iconDef.x) * rec[0] + iconDef.x * rec[2] - 0.5 * iconImage.bitmap.width);
+                }
+                if (iconDef.y == "top") {
+                    y = rec[1] + config.offset;
+                } else if (iconDef.y == "bottom") {
+                    y = rec[3] - config.offset - iconImage.bitmap.height;
+                } else if (iconDef.y == "center") {
+                    y = (rec[3] + rec[1] - iconImage.bitmap.height) / 2;
+                } else {
+                    y = Math.floor((1 - iconDef.y) * rec[1] + iconDef.y * rec[3] - 0.5 * iconImage.bitmap.height);
+                }
+            } catch (ex) {
+                console.log("!!!! Problem processing file: " + imageDef.fileName + "  icon: " + iconDef.iconName);
+                console.log(ex);
+                throw ex;
+            }      
 
             // add to image
             img.composite(iconImage, x, y, function (err, newimage) {
@@ -144,10 +162,11 @@ function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines,
             });
         });
     });
+
 }
 
 function identifyLines(img, horizontal) {
-    var lines = [];
+    // var lines = [];
     var segments = [];
 
     var dim1 = 0;
@@ -173,9 +192,9 @@ function identifyLines(img, horizontal) {
             while ((i2 < dim2) && isLine(i1, i2, horizontal, img)) {
                 i2++;
             }
+            // console.log("min length: " + config.minLength);
             if ((i2 - istart) > config.minLength) {
                 // dostatocne dlha ciara
-                lines.push(i1);
                 // hrubka ciary, toto by bolo to iste
                 // i1 += config.delta;
                 // uz som ciaru nasiel, viac ma to nezaujima
@@ -189,63 +208,110 @@ function identifyLines(img, horizontal) {
         }
     }
 
-    // return lines;
     return segments;
 }
 
 function identifyRectangles(hLines, vLines) {
+    // console.log('hlines', hLines);
+    // console.log('vlines', vLines);
     var rectangles = [];
     for (let hli1 = 0; hli1 < hLines.length; hli1++) {
         const hl1 = hLines[hli1];
         for (let hli2 = hli1 + 1; hli2 < hLines.length; hli2++) {
             const hl2 = hLines[hli2];
-            if ((Math.abs(hl1[0] - hl2[0]) < config.squareDelta) && (Math.abs(hl1[2] - hl2[2]) < config.squareDelta)) {
-                // tieto horizontalne usecky su nad sebou
+            if ((Math.abs(hl1[0] - hl2[0]) < config.delta) && 
+                (Math.abs(hl1[2] - hl2[2]) < config.delta) && 
+                (Math.abs(hl1[1] - hl2[1]) > config.minLength)) {
+                // tieto horizontalne usecky su nad sebou, ale nie su prilis blizko seba
                 var x1 = (hl1[0] + hl2[0]) / 2;
                 var y1 = hl1[1];
                 var x2 = (hl1[2] + hl2[2]) / 2;
                 var y2 = hl2[1];
 
-                var bocneHrany = 0;
-
                 // najdi lavu hranu
                 var vli = 0;
-                while ((vli < vLines.length) && (vLines[vli][0] < (x1 - config.squareDelta))) {
-                    vli++;
-                }
-                while ((vli < vLines.length) && (vLines[vli][0] < (x1 + config.squareDelta))) {
-                    if ((Math.abs(y1 - vLines[vli][1]) < config.squareDelta) &&
-                        (Math.abs(y2 - vLines[vli][3]) < config.squareDelta)) {
-                        // nasiel som bocnu hranu 
-                        bocneHrany++;
-                        x1 = Math.min(x1, vLines[vli][0]);
-                        break;
-                    } else {
-                        vli++;
+                while (vli < vLines.length) {
+                    var vll = vLines[vli];
+                    if(vll[0] < (x1 - config.delta)) {
+                        // tato ciara je prilis vlavo, hladam dalej
+                        vli += 1;
+                        continue;
                     }
-                }
-                if (bocneHrany < 1) {
-                    // nie je hrana  
-                    continue;
-                }
-                while ((vli < vLines.length) && (vLines[vli][2] < (x2 - config.squareDelta))) {
-                    vli++;
-                }
-                while ((vli < vLines.length) && (vLines[vli][2] < (x2 + config.squareDelta))) {
-                    if ((Math.abs(y1 - vLines[vli][1]) < config.squareDelta) &&
-                        (Math.abs(y2 - vLines[vli][3]) < config.squareDelta)) {
-                        // nasiel som bocnu hranu 
-                        bocneHrany++;
-                        x2 = Math.max(x2, vLines[vli][2]);
+                    if(vll[0] > (x1 + config.delta)) {
+                        // tato ciara je prilis vpravo, uz nic nenajdem
                         break;
-                    } else {
-                        vli++;
                     }
-                }
-                if (bocneHrany >= 2) {
-                    // mam obdlznik
-                    rectangles.push([x1, y1, x2, y2]);
-                    break;
+                    if(Math.abs(y1 - vll[1]) > config.delta) {
+                        // tato ciare zacina v inej vyske, hladam dalej
+                        vli += 1;
+                        continue;
+                    }
+                    if(Math.abs(y2 - vll[3]) > config.delta) {
+                        // tato ciare konci v inej vyske, hladam dalej
+                        vli += 1;
+                        continue;
+                    }
+                    // tato ciara je fajn lava hrana
+                    x1 = Math.min(x1, vll[0]);
+                    vli += 1;
+
+                    // idem hladat pravu hranu
+                    vlir = vli;
+                    while (vlir < vLines.length) {
+                        vlr = vLines[vlir];
+                        if(vlr[0] < (x2 - config.delta)) {
+                            // tato ciara je prilis vlavo, hladam dalej
+                            vlir += 1;
+                            continue;
+                        }
+                        if(vlr[0] > (x2 + config.delta)) {
+                            // tato ciara je prilis vpravo, uz nic nenajdem
+                            break;
+                        }
+                        if(Math.abs(y1 - vlr[1]) > config.delta) {
+                            // tato ciare zacina v inej vyske, hladam dalej
+                            vlir += 1;
+                            continue;
+                        }
+                        if(Math.abs(y2 - vlr[3]) > config.delta) {
+                            // tato ciare konci v inej vyske, hladam dalej
+                            vlir += 1;
+                            continue;
+                        }
+                        // tato ciara je fajn prava hrana
+                        x2 = Math.max(x2, vlr[2]);
+
+                        // este overim, ci ide o obdlznik s oblymi rohami alebo hranaty, ci to nie je nejaky fault
+                        if( ((hl1[0]-x1) > (config.delta/3)) &&
+                            ((x2-hl1[2]) > (config.delta/3)) &&
+                            ((vll[1]-y1) > (config.delta/3)) &&
+                            ((y2-vll[3]) > (config.delta/3))) {
+                                // mam round rectangle
+                                // console.log("round rect " + rectangles.length);
+                                rectangles.push([x1, y1, x2, y2]);
+                                hli2 = hLines.length;
+                                vli = vLines.length;
+                                break;
+                        } else if( (Math.abs(hl1[0]-x1) < (config.delta/6)) &&
+                                    (Math.abs(x2-hl1[2]) < (config.delta/6)) &&
+                                    (Math.abs(vll[1]-y1) < (config.delta/6)) &&
+                                    (Math.abs(y2-vll[3]) < (config.delta/6))) {
+                                // mam normal rectangle
+                                // console.log("normal rect " + rectangles.length);
+                                // if(rectangles.length == 7) {
+                                //     console.log([x1, y1, x2, y2]);
+                                //     console.log(hl1);
+                                //     console.log(vll);
+                                // }
+                                rectangles.push([x1, y1, x2, y2]);
+                                hli2 = hLines.length;
+                                vli = vLines.length;
+                                break;
+                        } else {
+                            // nie je obdlznik
+                            vlir += 1;
+                        }
+                    }
                 }
             }
         }
@@ -255,15 +321,16 @@ function identifyRectangles(hLines, vLines) {
 
 function addGrayLinesToImage(img, imageDef, horizontalLines, verticalLines) {
     var imgLines = img.clone();
-    const grayColor = Jimp.rgbaToInt(50, 50, 50, 255);
+    // const grayColor = Jimp.rgbaToInt(50, 50, 50, 255);
+    const grayColor = Jimp.rgbaToInt(255, 0, 0, 255);
 
     horizontalLines.forEach(line => {
-        for (let idelta = 0; idelta < img.bitmap.width; idelta += 2) {
+        for (let idelta = line[0]; idelta < line[2]; idelta += 1) {
             imgLines.setPixelColor(grayColor, idelta, line[1]);
         }
     });
     verticalLines.forEach(line => {
-        for (let idelta = 0; idelta < img.bitmap.height; idelta += 2) {
+        for (let idelta = line[1]; idelta < line[3]; idelta += 1) {
             imgLines.setPixelColor(grayColor, line[0], idelta);
         }
     });
@@ -271,25 +338,10 @@ function addGrayLinesToImage(img, imageDef, horizontalLines, verticalLines) {
     imgLines.write(projectDir + '/Architecture_temp/lines/' + imageDef.fileName + "_lines.png");
 }
 
-// function addRedSegmentsToImage(img, segments) {
-//     const redColor = Jimp.rgbaToInt(255, 0, 0, 255);
-//     segments.forEach(segment => {
-//         if (segment[1] == segment[3]) {
-//             for (let x = segment[0]; x < segment[2]; x++) {
-//                 img.setPixelColor(redColor, x, segment[1]);
-//             }
-//         } else {
-//             for (let y = segment[1]; y < segment[3]; y++) {
-//                 img.setPixelColor(redColor, segment[0], y);
-//             }
-//         }
-//     });
-
-//     return img;
-// }
-
 function addGreenRectangles(img, imageDef, rectangles) {
     var imgRec = img.clone();
+    // console.log("rec for " + imageDef.fileName);
+    // console.log(rectangles);
     // imgRec = addRedSegmentsToImage(imgRec, horizontalLines);
     // imgRec = addRedSegmentsToImage(imgRec, verticalLines);
 
@@ -308,12 +360,14 @@ function addGreenRectangles(img, imageDef, rectangles) {
                 imgRec.setPixelColor(greenColor, rectangle[2], y);
             }
             imgRec.print(font, rectangle[0] + config.offset, rectangle[1] + config.offset, recCounter.toString());
+            // console.log("green rectangle " + recCounter.toString());
             recCounter++;
         });
         imgRec.write(projectDir + '/Architecture_temp/lines/' + imageDef.fileName + "_rec.png");
     });
 }
 
+// overi, ci je tu tmavy bod
 function testLineXY(x, y, img) {
     var c = Jimp.intToRGBA(img.getPixelColor(x, y));
     var intensity = c.r * c.r + c.g * c.g + c.b * c.b;
@@ -321,6 +375,7 @@ function testLineXY(x, y, img) {
     // return ((c.r == 0 && c.g == 0 && c.b == 0 && c.a == 255) || (c.r == 102 && c.g == 102 && c.b == 102 && c.a == 255));
 }
 
+// odpovie, ci je na tomto bode ciara
 function isLine(i1, i2, horizontal, img) {
     if (horizontal) {
         return testLineXY(i2, i1, img);
