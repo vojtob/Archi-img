@@ -252,7 +252,6 @@ function identifyRectangles(hLines, vLines) {
                         continue;
                     }
                     // tato ciara je fajn lava hrana
-                    x1 = Math.min(x1, vll[0]);
                     vli += 1;
 
                     // idem hladat pravu hranu
@@ -279,21 +278,22 @@ function identifyRectangles(hLines, vLines) {
                             continue;
                         }
                         // tato ciara je fajn prava hrana
-                        x2 = Math.max(x2, vlr[2]);
 
                         // este overim, ci ide o obdlznik s oblymi rohami alebo hranaty, ci to nie je nejaky fault
-                        if( ((hl1[0]-x1) > (config.delta/3)) &&
-                            ((x2-hl1[2]) > (config.delta/3)) &&
+                        sx1 = Math.min(x1, vll[0]);
+                        sx2 = Math.max(x2, vlr[2]);
+                        if( ((hl1[0]-sx1) > (config.delta/3)) &&
+                            ((sx2-hl1[2]) > (config.delta/3)) &&
                             ((vll[1]-y1) > (config.delta/3)) &&
                             ((y2-vll[3]) > (config.delta/3))) {
                                 // mam round rectangle
                                 // console.log("round rect " + rectangles.length);
-                                rectangles.push([x1, y1, x2, y2]);
+                                rectangles.push([sx1, y1, sx2, y2]);
                                 hli2 = hLines.length;
                                 vli = vLines.length;
                                 break;
-                        } else if( (Math.abs(hl1[0]-x1) < (config.delta/6)) &&
-                                    (Math.abs(x2-hl1[2]) < (config.delta/6)) &&
+                        } else if( (Math.abs(hl1[0]-sx1) < (config.delta/6)) &&
+                                    (Math.abs(sx2-hl1[2]) < (config.delta/6)) &&
                                     (Math.abs(vll[1]-y1) < (config.delta/6)) &&
                                     (Math.abs(y2-vll[3]) < (config.delta/6))) {
                                 // mam normal rectangle
@@ -303,7 +303,7 @@ function identifyRectangles(hLines, vLines) {
                                 //     console.log(hl1);
                                 //     console.log(vll);
                                 // }
-                                rectangles.push([x1, y1, x2, y2]);
+                                rectangles.push([sx1, y1, sx2, y2]);
                                 hli2 = hLines.length;
                                 vli = vLines.length;
                                 break;
