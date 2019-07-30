@@ -1,2 +1,3 @@
-mkdir ..\Architecture
-call node C:\Projects_src\Archi-img\lines.js C:\Projects_src\cpp C:\Projects_src\cpp
+set PROJECT_DIR=%~dp0
+set PROJECT_DIR=%PROJECT_DIR:~0,-7%
+call C:\Projects_src\Personal\Archi-img\utils\addIcons.bat %PROJECT_DIR%

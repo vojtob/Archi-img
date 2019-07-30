@@ -11,7 +11,7 @@ var processedImages = 0;
 
 // setup resolution, line width, scale, ... 
 // calibration based on standard image Calibration.png
-Jimp.read(projectDir + '/Architecture_temp/exported/Calibration.png', function (err, img) {
+Jimp.read(projectDir + '/temp/img_exported/Calibration.png', function (err, img) {
     if (err) throw err;
 
     // temporary config for calibration
@@ -52,7 +52,7 @@ function readFiles() {
         
         imageDefs.forEach(imageDef => {
             console.log('start processing image ' + imageDef.fileName);
-            Jimp.read(projectDir + '/Architecture_temp/exported/' + imageDef.fileName + ".png", function (err, img) {
+            Jimp.read(projectDir + '/temp/img_exported/' + imageDef.fileName + ".png", function (err, img) {
                 if (err) throw err;
                 // console.log(img);
                 
@@ -335,7 +335,7 @@ function addGrayLinesToImage(img, imageDef, horizontalLines, verticalLines) {
         }
     });
 
-    imgLines.write(projectDir + '/Architecture_temp/lines/' + imageDef.fileName + "_lines.png");
+    imgLines.write(projectDir + '/temp/img_lines/' + imageDef.fileName + "_lines.png");
 }
 
 function addGreenRectangles(img, imageDef, rectangles) {
@@ -363,7 +363,7 @@ function addGreenRectangles(img, imageDef, rectangles) {
             // console.log("green rectangle " + recCounter.toString());
             recCounter++;
         });
-        imgRec.write(projectDir + '/Architecture_temp/lines/' + imageDef.fileName + "_rec.png");
+        imgRec.write(projectDir + '/temp/img_lines/' + imageDef.fileName + "_rec.png");
     });
 }
 
