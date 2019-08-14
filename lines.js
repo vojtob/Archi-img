@@ -1,9 +1,10 @@
 var fs = require('fs');
 var Jimp = require("jimp");
 var projectDir = process.argv[2];
-var exportDir = projectDir;
+var sourceDir = projectDir  + '/src/Architecture/model';
+var releaseDir = projectDir  + '/release';
 if (process.argv.length > 3) exportDir = process.argv[3];
-var config = require(projectDir + '/Architecture_src/model/config');
+var config = require(sourceDir + '/config');
 var resolution = require("screen-resolution");
 
 var imagesCount = 0;
@@ -11,7 +12,7 @@ var processedImages = 0;
 
 // setup resolution, line width, scale, ... 
 // calibration based on standard image Calibration.png
-Jimp.read(projectDir + '/temp/img_exported/Calibration.png', function (err, img) {
+Jimp.read(releaseDir + '/img_exported/Calibration.png', function (err, img) {
     if (err) throw err;
 
     // temporary config for calibration
@@ -45,14 +46,14 @@ Jimp.read(projectDir + '/temp/img_exported/Calibration.png', function (err, img)
 function readFiles() {
     console.log("Processing images from: " + config.imagesFile);
     
-    fs.readFile(projectDir + '/Architecture_src/model/' + config.imagesFile, 'utf8', function (err, data) {
+    fs.readFile(sourceDir + '/' + config.imagesFile, 'utf8', function (err, data) {
         if (err) throw err;
         var imageDefs = JSON.parse(data);
         imagesCount = imageDefs.length;
         
         imageDefs.forEach(imageDef => {
             console.log('start processing image ' + imageDef.fileName);
-            Jimp.read(projectDir + '/temp/img_exported/' + imageDef.fileName + ".png", function (err, img) {
+            Jimp.read(releaseDir + '/img_exported/' + imageDef.fileName + ".png", function (err, img) {
                 if (err) throw err;
                 // console.log(img);
                 
@@ -91,12 +92,12 @@ function processImage(imageDef, img) {
 function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines, rectangles) {
     if (iconIndex == imageDef.icons.length) {
         // vsetky pridane, uloz obrazok
-        img.write(exportDir + '/Architecture/' + imageDef.fileName + ".png", function (err, img) {
+        img.write(projectDir + '/Architecture/' + imageDef.fileName + ".png", function (err, img) {
             if(err) {
                 console.log("Problem with image " + imageDef.fileName);
                 console.log(err);
             }
-            console.log((++processedImages) + '/' + imagesCount + "  DONE image " + exportDir + '/Architecture/' + imageDef.fileName);
+            console.log((++processedImages) + '/' + imagesCount + "  DONE image " + projectDir + '/Architecture/' + imageDef.fileName);
             if (processedImages == imagesCount) {
                 console.log("ALL IMAGES PROCESSED, DONE")
             }
@@ -335,7 +336,7 @@ function addGrayLinesToImage(img, imageDef, horizontalLines, verticalLines) {
         }
     });
 
-    imgLines.write(projectDir + '/temp/img_lines/' + imageDef.fileName + "_lines.png");
+    imgLines.write(releaseDir + '/img_lines/' + imageDef.fileName + "_lines.png");
 }
 
 function addGreenRectangles(img, imageDef, rectangles) {
@@ -363,7 +364,7 @@ function addGreenRectangles(img, imageDef, rectangles) {
             // console.log("green rectangle " + recCounter.toString());
             recCounter++;
         });
-        imgRec.write(projectDir + '/temp/img_lines/' + imageDef.fileName + "_rec.png");
+        imgRec.write(releaseDir + '/img_lines/' + imageDef.fileName + "_rec.png");
     });
 }
 
