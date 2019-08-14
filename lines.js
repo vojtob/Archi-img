@@ -108,7 +108,7 @@ function addIcon2Image(img, imageDef, iconIndex, verticalLines, horizontalLines,
 
     var iconDef = imageDef.icons[iconIndex];
     // read icon file
-    Jimp.read(projectDir + '/resources/icons/' + iconDef.iconName, function (err, iconImage) {
+    Jimp.read(projectDir + '/src/res/icons/' + iconDef.iconName, function (err, iconImage) {
         if (err) {
             console.log(err);
             throw err;
