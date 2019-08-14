@@ -1,26 +1,29 @@
 # Archi-img : Doplnenie icon do obrázkov vyexportovaných z archi
 
 Očakávaný postup je takýto:
-1. Pomocou `utils\exportImages.bat` sa z Archimate modelu (`Architecture_src\model\*.archimate`) vygenerujú png súbory. Používa sa pri tom `utils\autoit\exportImages.au3` ktorý simuluje klikanie v architool a generuje obrázky do `Architecture_temp\exported`. Preto musí byť pri tom otvorený model v architool. Pri vytváraní nového projektu treba premenovať v `exportImages.au3` názov archimatetool okna. 
-2. Niektoré z týchto súborov chcem obohatiť o ikonky. Na to slúži `utils\addIcons.bat`, ktorý zavolá `C:\Projects_src\Archi-img\lines.js` a ako parametre má cestu k projektu a cestu kam má exportovať finálne obrázky. Interne ešte potrebuje config súbor `Architecture_src\model\config.js` a popis súborov, do ktorých treba doplniť ikony
-	1. Pre každý obrázok definovaný v popisnom súbore vygeneruje `Architecture_temp\lines\<subor>_lines.png`, kde sú naznačené všetky čiary identifikované v obrázku. To pomáha zistiť zarovnanie.
-	2. Pre každý obrázok vygeneruje `Architecture_temp\lines\<subor>_rec.png`, kde sú označené všetky identifiované obdĺžniky s číslami, aby sa podľa toho dali doplniť ikony.
+1. **`exportImages.bat`** z Archimate modelu (`src\Architecture\model\*.archimate`) vygeneruje png súbory. Používa sa pri tom `autoit\exportImages.au3` ktorý simuluje klikanie v architool a generuje obrázky do `release\img_exported`. Preto musí byť pri tom otvorený model v architool. Pri vytváraní nového projektu treba premenovať v `exportImages.au3` názov archimatetool okna. 
+1. **`addIcons.bat`** pridá do niektorých z týchto súborov ikonky. Zavolá sa `C:\Projects_src\Archi-img\lines.js` a ako parametre má cestu k projektu. Interne ešte potrebuje config súbor `src\Architecture\model\config.js` a popis súborov, do ktorých treba doplniť ikony
+	1. Pre každý obrázok definovaný v popisnom súbore vygeneruje `release\img_lines\<subor>_lines.png`, kde sú naznačené všetky čiary identifikované v obrázku. To pomáha zistiť zarovnanie.
+	2. Pre každý obrázok vygeneruje `release\img_lines\<subor>_rec.png`, kde sú označené všetky identifiované obdĺžniky s číslami, aby sa podľa toho dali doplniť ikony.
 	3. Do obrázku doplní ikony (ak sú nejaké definované)
 	4. Obrázok s doplnenými ikonami uloží do adresára
+1. **`generateImages.bat`** vygenerovanie mermaid obrázkov
+1. **`createSpec.bat`** Vytvorenie specifikacie 
 
   
 ## Popis adresárov
 
 | Adresár                | Popis                                     | Môže sa zmazať?           |
 | -----------------------|-------------------------------------------| ------------------------- |
-| **Architecture_src**   | Tu sú zdrojové veci                       | NIE, toto treba zálohovať |
-| Architecture_src/memos | Lightweight Architecture Decision Records | nie |
-| Architecture_src/model | zdrojáky modelu                           | nie |
-| Architecture_src/utils | nástroje na exoportovanie, generovanie    | nie |
-| Architecture_src/img   | obrázky, ktoré nie sú z modelu, tieto sa budú iba kopírovať do výslednej štruktúry | nie |
+| **src**                | Tu sú zdrojové veci                       | NIE, toto treba zálohovať |
+| src/Architecture       | Architecture description                  | nie |
+| src/Architecture/model | zdrojáky modelu                           | nie |
+| src/Architecture/img   | zdrojáky obrázkov v mermaid               | nie |
+| src/Architecture/specifikacia | Dokumentacia v md súboroch, z ktorej sa dajú generovať webové stránky alebo pdf dokumentácia | nie |
+| src/res                | ikony, konfiguracia, ...                  | nie |
+| **utils**                  | scripts na exportovanie, generovanie      | nie |
 | **Architecture**       | Vygenerované, postprocessované, zkopírované súbory, výsledný tvar | áno, toto by sa malo dať celé vygenerovať |
-| Architecture/01-Business, 02-Application, 03-Technology | vygenerované obrázky s doplnenými ikonami | áno, dajú sa nanovo vygenerovať |
-| **Architecture_temp**  | Pomocné súbory pri generovaní             | áno |
+| **release**            | Vygenerovaná dokumentácia, pomocné súbory pri generovaní, ... | áno |
 
 ## Atribúty obrázkov
 ```javascript
