@@ -28,7 +28,7 @@ ECHO    icons    - add icons to images
 ECHO    mm       - generate mermaid images
 ECHO    spec     - create specification
 ECHO    hugo2pdf - generate pdf version of specification
-ECHO    hugo2pdf - generate web version of specification, could be deployed anywhere
+ECHO    hugo2web URL - generate web version of specification, could be deployed anywhere, default URL-> http://localhost:8080
 ECHO    clean    - delete all generated files
 ECHO.
 
@@ -62,12 +62,16 @@ GOTO DONE
 
 :HUGO2PDF
 ECHO Generate pdf from specification, must call spec first!
-ECHO NOT IMPLEMENTED !!
+@ECHO ON
+@call C:\Projects_src\Personal\Archi-img\utils\hugo2pdf.bat %PROJECT_DIR%
+@ECHO OFF
 GOTO DONE
 
 :HUGO2WEB
 ECHO Generate web from specification, must call spec first!
-ECHO NOT IMPLEMENTED !!
+@ECHO ON
+@call C:\Projects_src\Personal\Archi-img\utils\hugo2web.bat %PROJECT_DIR%
+@ECHO OFF
 GOTO DONE
 
 :DELETE_GENERATED

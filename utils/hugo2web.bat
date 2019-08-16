@@ -1,12 +1,22 @@
-@set PROJECT_DIR=%~dp0
-@set PROJECT_DIR=%PROJECT_DIR:~0,-20%
-@set SPEC_DIR=%PROJECT_DIR%\release\spec_web
+@SET PROJECT_DIR=%1
+@SET PROJECT_NAME=%~n1
+@set DOCOOL_DIR=%~dp0
+@set DOCOOL_DIR=%DOCOOL_DIR:~0,-7%
+
+rmdir %PROJECT_DIR%\release\spec_web /S /Q
+mkdir %PROJECT_DIR%\release\spec_web\%PROJECT_NAME%
 
 REM ******** export as html documentation
-rmdir %SPEC_DIR% /S /Q
-mkdir %SPEC_DIR%
+if "%~2"=="" goto DEFAULT_URL
+@SET DEST_PATH=%~2
+:GENERATEWEB
+@SET DEST_PATH=%DEST_PATH%/%PROJECT_NAME%/
+hugo -D -s ..\temp\spec_local\ -t hugo-theme-docdock -d ..\..\release\spec_web\%PROJECT_NAME% -b "%DEST_PATH%"
 
-hugo -D -s ..\..\release\spec_local\ -t hugo-theme-docdock -d ..\..\release\spec_web -b "http://localhost:8080/cpp/"
+GOTO DONE
 
-REM asi este treba nastavit baseURL = "http://example.org/"
-REM %PROJECT_DIR%\Implementation\generateDocs\replace.py %PROJECT_DIR%\temp\docPdf\index.html %PROJECT_DIR%\temp\docPdf\index2.html "img src=\"/" "img src=\"%PROJECT_DIR%\temp\docPdf\\"
+:DEFAULT_URL
+@SET DEST_PATH=http://localhost:8080
+GOTO GENERATEWEB
+
+:DONE

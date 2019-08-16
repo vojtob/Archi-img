@@ -1,15 +1,14 @@
-@set PROJECT_DIR=%~dp0
-@set PROJECT_DIR=%PROJECT_DIR:~0,-20%
-@set SPEC_DIR=%PROJECT_DIR%\release\docPdf
+@SET PROJECT_DIR=%1
+@SET PROJECT_NAME=%~n1
+@set DOCOOL_DIR=%~dp0
+@set DOCOOL_DIR=%DOCOOL_DIR:~0,-7%
 
-
-REM ******** export as single html
+@set SPEC_DIR=%PROJECT_DIR%\temp\docPdf
 rmdir %SPEC_DIR% /S /Q
 mkdir %SPEC_DIR%
-hugo -D -s ..\..\release\spec_local\ -t onePageHtml -d ..\docPdf
 
-REM ******** replace references
-%PROJECT_DIR%\src\generateDocs\replace.py %SPEC_DIR%\index.html %SPEC_DIR%\index2.html "img src=\"/" "img src=\"%SPEC_DIR%\"
+REM ******** export as single html
+hugo -D -s ..\temp\spec_local\ -t onePageHtml -d ..\docPdf -b "%SPEC_DIR%"
 
 REM ******** generate docx
-pandoc %SPEC_DIR%\index2.html -f html -t docx -o %PROJECT_DIR%\release\specifikacia.docx
+pandoc %SPEC_DIR%\index.html -f html -t docx -o %PROJECT_DIR%\release\%PROJECT_NAME%.docx --verbose
