@@ -11,6 +11,7 @@ IF "%~2"=="archi" GOTO ARCHI
 IF "%~2"=="icons" GOTO ICONS
 IF "%~2"=="img" GOTO IMAGES
 IF "%~2"=="spec" GOTO SPECIFICATION
+IF "%~2"=="specUpdate" GOTO SPECIFICATIONUP
 IF "%~2"=="clean" GOTO DELETE_GENERATED
 IF "%~2"=="hugo2pdf" GOTO HUGO2PDF
 IF "%~2"=="hugo2web" GOTO HUGO2WEB
@@ -26,9 +27,12 @@ ECHO commands:
 ECHO    archi    - export images from archi model to png
 ECHO    icons    - add icons to images
 ECHO    img      - generate mermaid, umlet images
-ECHO    spec     - create specification
-ECHO    hugo2pdf - generate pdf version of specification
-ECHO    hugo2web URL - generate web version of specification, could be deployed anywhere, default URL-> http://localhost:8080
+ECHO    -----------------------------------------
+ECHO    spec         - create specification
+ECHO    specUpdate   - update specification content
+ECHO    hugo2pdf     - generate pdf version of specification
+ECHO    hugo2web URL - generate web version of specification, could be deployed anywhere, default URL http://localhost:8080
+ECHO    -----------------------------------------
 ECHO    clean    - delete all generated files
 ECHO.
 
@@ -57,6 +61,13 @@ GOTO DONE
 ECHO Generate specification
 @ECHO ON
 @call C:\Projects_src\Personal\Archi-img\utils\createSpec.bat %PROJECT_DIR%
+@ECHO OFF
+GOTO DONE
+
+:SPECIFICATIONUP
+ECHO Update specification content
+@ECHO ON
+@call C:\Projects_src\Personal\Archi-img\utils\updateSpec.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 

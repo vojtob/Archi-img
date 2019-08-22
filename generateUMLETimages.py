@@ -34,6 +34,6 @@ else:
     time.sleep(5)
     for (fromFile, toFile) in moveFile:
         # print(fromFile, toFile)
-        os.rename(fromFile, toFile)				
+        os.replace(fromFile, toFile)				
 				
 print ("UXF images generated")
