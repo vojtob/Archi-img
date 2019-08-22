@@ -9,7 +9,7 @@ ECHO.
 if "%~2"=="" goto BLANK
 IF "%~2"=="archi" GOTO ARCHI
 IF "%~2"=="icons" GOTO ICONS
-IF "%~2"=="mm" GOTO MERMAID
+IF "%~2"=="img" GOTO IMAGES
 IF "%~2"=="spec" GOTO SPECIFICATION
 IF "%~2"=="clean" GOTO DELETE_GENERATED
 IF "%~2"=="hugo2pdf" GOTO HUGO2PDF
@@ -25,7 +25,7 @@ ECHO.
 ECHO commands:
 ECHO    archi    - export images from archi model to png
 ECHO    icons    - add icons to images
-ECHO    mm       - generate mermaid images
+ECHO    img      - generate mermaid, umlet images
 ECHO    spec     - create specification
 ECHO    hugo2pdf - generate pdf version of specification
 ECHO    hugo2web URL - generate web version of specification, could be deployed anywhere, default URL-> http://localhost:8080
@@ -46,8 +46,8 @@ ECHO Add icons to archimate images based on imagas.json
 @ECHO OFF
 GOTO DONE
 
-:MERMAID
-ECHO Generate images from mermaid files
+:IMAGES
+ECHO Generate images from mermaid, umlet files
 @ECHO ON
 @call C:\Projects_src\Personal\Archi-img\utils\generateImages.bat %PROJECT_DIR%
 @ECHO OFF
