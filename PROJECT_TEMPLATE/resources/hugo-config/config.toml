@@ -1,8 +1,0 @@
-baseURL = "http://example.org/"
-languageCode = "sk"
-DefaultContentLanguage = "sk"
-title = "IS Centrum právnej pomoci - špecifikácia"
-theme = 
-
-[outputs]
-home = [ "HTML"]
