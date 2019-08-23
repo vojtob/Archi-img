@@ -6,6 +6,7 @@
 @set SPEC_DIR=%PROJECT_DIR%\temp\docPdf
 rmdir %SPEC_DIR% /S /Q
 mkdir %SPEC_DIR%
+mkdir %PROJECT_DIR%\release
 
 REM ******** export as single html
 hugo -D -s ..\temp\spec_local\ -t onePageHtml -d ..\docPdf -b "%SPEC_DIR%"

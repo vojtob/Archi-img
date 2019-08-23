@@ -40,7 +40,9 @@ GOTO DONE
 
 :ARCHI
 ECHO Generate images from archimate model, swith to archi tool!
+@ECHO ON
 @call C:\Projects_src\Personal\Archi-img\utils\exportImages.bat %PROJECT_DIR%
+@ECHO OFF
 GOTO DONE
 
 :ICONS

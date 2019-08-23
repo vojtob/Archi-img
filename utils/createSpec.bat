@@ -11,10 +11,10 @@ robocopy /np /nfl /njh /njs /ndl /nc /ns %PROJECT_DIR%\src\Architecture\specifik
 REM ******** Setup theme
 @set THEME_NAME=hugo-theme-docdock
 mkdir %SPEC_DIR%\themes\%THEME_NAME%
-robocopy /np /nfl /njh /njs /ndl /nc /ns %PROJECT_DIR%\src\res\themes\%THEME_NAME% %SPEC_DIR%\themes\%THEME_NAME% /E
+robocopy /np /nfl /njh /njs /ndl /nc /ns C:\Projects_src\Personal\Archi-img\res\themes\%THEME_NAME% %SPEC_DIR%\themes\%THEME_NAME% /E
 @set THEME_NAME=onePageHtml
 mkdir %SPEC_DIR%\themes\%THEME_NAME%
-robocopy /np /nfl /njh /njs /ndl /nc /ns %PROJECT_DIR%\src\res\themes\%THEME_NAME% %SPEC_DIR%\themes\%THEME_NAME% /E
+robocopy /np /nfl /njh /njs /ndl /nc /ns C:\Projects_src\Personal\Archi-img\res\themes\%THEME_NAME% %SPEC_DIR%\themes\%THEME_NAME% /E
 copy %PROJECT_DIR%\src\res\hugo-config\configNoTheme.toml %SPEC_DIR%\config.toml
 REM copy %PROJECT_DIR%\resources\hugo-config\config.toml %PROJECT_DIR%\temp\specifikacia\config.toml
 REM C:\prg\fart\fart %PROJECT_DIR%\temp\specifikacia\config.toml "theme = " "theme = \"%THEME_NAME%\""
