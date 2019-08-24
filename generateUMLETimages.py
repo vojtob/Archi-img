@@ -11,7 +11,8 @@ else:
 
     projectDir = sys.argv[1]
     srcDir = os.path.join(projectDir, 'src', 'img')
-    destDir = os.path.join(projectDir, 'release', 'img')
+    # destDir = os.path.join(projectDir, 'release', 'img')
+    destDir = os.path.join(projectDir, 'temp', 'img_exported')
     
     moveFile = []
 
