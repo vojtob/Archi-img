@@ -10,9 +10,8 @@ else:
     umletPath = os.path.join('C:/', 'prg', 'Umlet', 'Umlet')
 
     projectDir = sys.argv[1]
-    srcDir = os.path.join(projectDir, 'src', 'Architecture', 'img')
-    destDir = os.path.join(projectDir, 'Architecture')
-    # destDir = os.path.join(projectDir, 'release', 'spec_local', 'static', 'img')
+    srcDir = os.path.join(projectDir, 'src', 'img')
+    destDir = os.path.join(projectDir, 'release', 'img')
     
     moveFile = []
 

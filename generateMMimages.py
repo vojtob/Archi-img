@@ -9,8 +9,8 @@ else:
     mmPath = os.path.join('C:/', 'prg', 'mermaid', 'node_modules', 'mermaid.cli', 'index.bundle.js')
 
     projectDir = sys.argv[1]
-    srcDir = os.path.join(projectDir, 'src', 'Architecture', 'img')
-    destDir = os.path.join(projectDir, 'Architecture')
+    srcDir = os.path.join(projectDir, 'src', 'img')
+    destDir = os.path.join(projectDir, 'release', 'img')
     # destDir = os.path.join(projectDir, 'release', 'spec_local', 'static', 'img')
     
     for (dirpath, dirnames, filenames) in os.walk(srcDir):

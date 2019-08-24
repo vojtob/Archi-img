@@ -1,5 +1,5 @@
 #include <MsgBoxConstants.au3>
-Local $hWnd = WinWaitActive("Archi - " & $CmdLine[1] & "\src\Architecture\model\");
+Local $hWnd = WinWaitActive("Archi - " & $CmdLine[1] & "\src\model\");
 Local $imageScale = 100;
 Local $projectDir = $CmdLine[1] & "\temp\img_exported";
 Sleep(200);

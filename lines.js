@@ -1,8 +1,8 @@
 var fs = require('fs');
 var Jimp = require("jimp");
 var projectDir = process.argv[2];
-var configDir = projectDir  + '/src/Architecture/model';
-var outDir = projectDir  + '/Architecture';
+var configDir = projectDir  + '/src/model';
+var outDir = projectDir  + '/release/img';
 var exportedDir = projectDir  + '/temp/img_exported';
 var linesDir = projectDir  + '/temp/img_lines';
 if (process.argv.length > 3) exportDir = process.argv[3];
