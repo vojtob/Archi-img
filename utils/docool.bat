@@ -25,8 +25,8 @@ ECHO Usage: docool command
 ECHO.      
 ECHO commands:
 ECHO    archi    - export images from archi model to png
-ECHO    icons    - add icons to images
 ECHO    img      - generate mermaid, umlet images
+ECHO    icons    - add icons to images
 ECHO    -----------------------------------------
 ECHO    spec         - create specification
 ECHO    specUpdate   - update specification content
@@ -48,7 +48,8 @@ GOTO DONE
 :ICONS
 ECHO Add icons to archimate images based on imagas.json
 @ECHO ON
-@call C:\Projects_src\Personal\Archi-img\utils\addIcons.bat %PROJECT_DIR%
+call C:\Projects_src\Personal\Archi-img\addIcons.py %PROJECT_DIR%
+REM @call C:\Projects_src\Personal\Archi-img\utils\addIcons.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 

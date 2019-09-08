@@ -24,6 +24,7 @@ else:
                     os.makedirs(filePath)
                 print('convert MM file', fileName)
                 cmd = 'node ' + mmPath + ' -w 1400 -i ' + os.path.join(dirpath,fileName) + '.mmd -o ' + os.path.join(filePath,fileName) + '.png'
+                # print(cmd)
                 subprocess.run(cmd, shell=False)
 
 print ("MM images generated")
