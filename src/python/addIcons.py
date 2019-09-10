@@ -5,7 +5,7 @@ import shutil
 import cv2
 import numpy as np
 import rectRecognition as rr
-import src.python.imageUtils as imageUtils
+import imageUtils
 
 
 def copyImage(imageSourcePath, imageDestPath):
