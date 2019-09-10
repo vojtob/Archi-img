@@ -1,26 +1,6 @@
 import cv2
 import numpy as np
 
-def addIcon2Image(img, icon):
-    icon = cv2.resize(icon, (150,150))
-    x1, x2 = (img.shape[1] - icon.shape[1])//2, (img.shape[1] + icon.shape[1])//2
-    y1, y2 = (img.shape[0] - icon.shape[0])//2, (img.shape[0] + icon.shape[0])//2
-    alpha_icon = icon[:, :, 3] / 255.0
-    alpha_img = 1.0 - alpha_icon
-
-    for c in range(0, 3):
-        img[y1:y2, x1:x2, c] = (alpha_icon * icon[:, :, c] + alpha_img * img[y1:y2, x1:x2, c])
-    return img
-
-def convertImage(img):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    thresh = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY_INV)[1]
-    # edges = cv2.Canny(gray,100,200)
-    # blur = cv2.blur(edges,(4,4))
-    # cv2.imshow(cv2.namedWindow("addIcons"), gray)
-    # cv2.waitKey()
-    return thresh
-
 def addPointToSegments(lineSegments, keyCoordinate, lenCoordinate, reallySmallGap, minSegmentLength):
     """ add a point to segments """
     if(lineSegments.get(keyCoordinate)):
@@ -139,7 +119,9 @@ def findRectangles(lineSegmentsHorizontal, lineSegmentsVertical, cornerGap):
     rectangles = []
 
     # iterate over horizontal segments a consider them as horizontal top line of rectangle
-    for y, topSegments in lineSegmentsHorizontal.items():
+    for y in sorted(lineSegmentsHorizontal.keys()):
+        topSegments = lineSegmentsHorizontal[y]
+    # for y, topSegments in lineSegmentsHorizontal.items():
         # start with TOP edge
         for topEdge in topSegments:
             leftEdge = findVerticalEdge(topEdge[0], y, cornerGap, lineSegmentsVertical)
@@ -158,23 +140,3 @@ def findRectangles(lineSegmentsHorizontal, lineSegmentsVertical, cornerGap):
             rectangles.append( ( (topEdge[0],leftEdge[0]), (bottomEdge[1],rightEdge[1]) )  ) 
 
     return rectangles
-
-def identifyRectangles(img):
-    # minSegmentLength = 30
-
-    imgBW = convertImage(img)
-    lineSegmentsHorizontal, lineSegmentsVertical = findLineSegments(imgBW, 6, 30)
-    rectangles = findRectangles(lineSegmentsHorizontal, lineSegmentsVertical, 4)
-
-    # for y, segments in lineSegmentsHorizontal.items():
-    #     for s in segments:
-    #         cv2.line(img, (s[0],y),(s[1],y), (0,255,0), thickness=2)
-    # for x, segments in lineSegmentsVertical.items():
-    #     for s in segments:
-    #         cv2.line(img, (x,s[0]),(x,s[1]), (255,0,0), thickness=2)
-
-    for r in rectangles:
-        cv2.rectangle(img, r[0], r[1], (0,0,255), thickness=2)
-
-    return img
-

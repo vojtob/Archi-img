@@ -4,3 +4,4 @@ test.py
 PROJECT_TEMPLATE/resources/themes/hugo-theme-docdock/
 res/themes/hugo-theme-docdock/
 *.pyc
+.vscode/
