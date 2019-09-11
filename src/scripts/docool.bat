@@ -41,7 +41,7 @@ GOTO DONE
 :ARCHI
 ECHO Generate images from archimate model, swith to archi tool!
 @ECHO ON
-@call C:\Projects_src\Personal\Archi-img\utils\exportImages.bat %PROJECT_DIR%
+@call C:\prg\docool\scripts\exportImages.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 
@@ -49,49 +49,49 @@ GOTO DONE
 ECHO Add icons to archimate images based on imagas.json
 @ECHO ON
 call C:\Projects_src\Personal\Archi-img\src\python\addIcons.py %PROJECT_DIR%
-REM @call C:\Projects_src\Personal\Archi-img\utils\addIcons.bat %PROJECT_DIR%
+REM @call C:\prg\docool\scripts\addIcons.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 
 :IMAGES
 ECHO Generate images from mermaid, umlet files
 @ECHO ON
-@call C:\Projects_src\Personal\Archi-img\utils\generateImages.bat %PROJECT_DIR%
+@call C:\prg\docool\scripts\generateImages.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 
 :SPECIFICATION
 ECHO Generate specification
 @ECHO ON
-@call C:\Projects_src\Personal\Archi-img\utils\createSpec.bat %PROJECT_DIR%
+@call C:\prg\docool\scripts\createSpec.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 
 :SPECIFICATIONUP
 ECHO Update specification content
 @ECHO ON
-@call C:\Projects_src\Personal\Archi-img\utils\updateSpec.bat %PROJECT_DIR%
+@call C:\prg\docool\scripts\updateSpec.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 
 :HUGO2PDF
 ECHO Generate pdf from specification, must call spec first!
 @ECHO ON
-@call C:\Projects_src\Personal\Archi-img\utils\hugo2pdf.bat %PROJECT_DIR%
+@call C:\prg\docool\scripts\hugo2pdf.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 
 :HUGO2WEB
 ECHO Generate web from specification, must call spec first!
 @ECHO ON
-@call C:\Projects_src\Personal\Archi-img\utils\hugo2web.bat %PROJECT_DIR%
+@call C:\prg\docool\scripts\hugo2web.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 
 :DELETE_GENERATED
 ECHO Delete generated files
 @ECHO ON
-@call C:\Projects_src\Personal\Archi-img\utils\deleteAll.bat %PROJECT_DIR%
+@call C:\prg\docool\scripts\deleteAll.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 

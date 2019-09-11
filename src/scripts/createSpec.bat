@@ -1,7 +1,7 @@
 @SET PROJECT_DIR=%1
 @set SPEC_DIR=%PROJECT_DIR%\temp\spec_local
 @set DOCOOL_DIR=%~dp0
-@set DOCOOL_DIR=%DOCOOL_DIR:~0,-7%
+@set DOCOOL_DIR=%DOCOOL_DIR:~0,-9%
 
 REM ******** create hugo site for specifikacia
 rmdir %SPEC_DIR% /S /Q

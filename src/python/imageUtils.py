@@ -37,11 +37,12 @@ def addIcon2Image(img, rectangle, iconFilePath, iconSize, xAlign, yAlign, margin
         x = (rectangle[1][0]+rectangle[0][0]-iconSize) // 2
     else:
         # relative
-        if(not xAlign.isnumeric()):
-            print('       icon x align bad format')
-        q = float(xAlign)
-        x = int( (1-q)*rectangle[0][0] + q*rectangle[1][0] - iconSize/2 )
-
+        try:
+            x = int( (1-xAlign)*rectangle[0][0] + xAlign*rectangle[1][0] - iconSize/2 )
+        except:
+            print('       icon x align bad format !!!!!!!')
+            return
+    
     # calculate y position of icon
     if(yAlign == 'top'):
         y = rectangle[0][1] + marginSize
@@ -51,10 +52,12 @@ def addIcon2Image(img, rectangle, iconFilePath, iconSize, xAlign, yAlign, margin
         y = (rectangle[1][1]+rectangle[0][1]-iconSize) // 2
     else:
         # relative
-        if(not yAlign.isnumeric()):
-            print('       icon y align bad format')
-        q = float(yAlign)
-        y = int( (1-q)*rectangle[0][1] + q*rectangle[1][1] - iconSize/2 )
+        try:
+            pass
+            y = int( (1-yAlign)*rectangle[0][1] + yAlign*rectangle[1][1] - iconSize/2 )
+        except:
+            print('       icon y align bad format !!!!!!!!')
+            return
 
     return overlayImageOverImage(img, icon, (x,y))
     

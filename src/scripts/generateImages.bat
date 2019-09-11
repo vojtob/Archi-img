@@ -1,2 +1,2 @@
-call C:\Projects_src\Personal\Archi-img\generateMMimages.py %~1
-call C:\Projects_src\Personal\Archi-img\generateUMLETimages.py %~1
+call C:\prg\docool\python\generateMMimages.py %~1
+call C:\prg\docool\python\generateUMLETimages.py %~1
