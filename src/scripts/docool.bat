@@ -13,8 +13,9 @@ IF "%~2"=="img" GOTO IMAGES
 IF "%~2"=="spec" GOTO SPECIFICATION
 IF "%~2"=="specUpdate" GOTO SPECIFICATIONUP
 IF "%~2"=="clean" GOTO DELETE_GENERATED
-IF "%~2"=="hugo2pdf" GOTO HUGO2PDF
-IF "%~2"=="hugo2web" GOTO HUGO2WEB
+IF "%~2"=="pdf" GOTO HUGO2PDF
+IF "%~2"=="web" GOTO HUGO2WEB
+IF "%~2"=="align" GOTO ALIGN
 
 ECHO Unknown parameter
 GOTO BLANK
@@ -30,10 +31,12 @@ ECHO    icons    - add icons to images
 ECHO    -----------------------------------------
 ECHO    spec         - create specification
 ECHO    specUpdate   - update specification content
-ECHO    hugo2pdf     - generate pdf version of specification
-ECHO    hugo2web URL - generate web version of specification, could be deployed anywhere, default URL http://localhost:8080
+ECHO    pdf     - generate pdf version of specification
+ECHO    web URL - generate web version of specification, could be deployed anywhere, default URL http://localhost:8080
 ECHO    -----------------------------------------
 ECHO    clean    - delete all generated files
+ECHO    -----------------------------------------
+ECHO    align    - delete all generated files
 ECHO.
 
 GOTO DONE
@@ -46,7 +49,7 @@ ECHO Generate images from archimate model, swith to archi tool!
 GOTO DONE
 
 :ICONS
-ECHO Add icons to archimate images based on imagas.json
+ECHO Add icons to archimate images based on images.json
 @ECHO ON
 call C:\Projects_src\Personal\Archi-img\src\python\addIcons.py %PROJECT_DIR%
 REM @call C:\prg\docool\scripts\addIcons.bat %PROJECT_DIR%
@@ -92,6 +95,13 @@ GOTO DONE
 ECHO Delete generated files
 @ECHO ON
 @call C:\prg\docool\scripts\deleteAll.bat %PROJECT_DIR%
+@ECHO OFF
+GOTO DONE
+
+:ALIGN
+ECHO Align archi images to grid
+@ECHO ON
+@call C:\prg\docool\scripts\align2grid.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 
