@@ -46,7 +46,7 @@ def addIcons2image(imageSourcePath, imageRectanglePath, imageReleasePath, iconDe
     # cv2.imwrite(imageRectanglePath[:-4] + '_BW' + imageRectanglePath[-4:], imgBW)
     # identify rectangles
     lineSegmentsHorizontal, lineSegmentsVertical = rr.findLineSegments(imgBW, 6, 30)
-    rectangles = rr.findRectangles(lineSegmentsHorizontal, lineSegmentsVertical, 40)
+    rectangles = rr.findRectangles(lineSegmentsHorizontal, lineSegmentsVertical, 10)
 
     # add rectangles into img
     writeRectangles2Image(img, rectangles, imageRectanglePath)
