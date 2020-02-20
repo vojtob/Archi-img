@@ -25,5 +25,3 @@ REM ******** Copy images to documentation
 @set IMG_DIR=%SPEC_DIR%\static\img
 mkdir %IMG_DIR%
 robocopy /np /nfl /njh /njs /ndl /nc /ns %PROJECT_DIR%\release\img %IMG_DIR% /E /XD memos-temp
-
-call %PROJECT_DIR%\utils\specGenerator.bat %PROJECT_DIR%
