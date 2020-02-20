@@ -1,5 +1,9 @@
 #include <MsgBoxConstants.au3>
 Local $hWnd = WinWaitActive("Archi - " & $CmdLine[1] & "\src\model\");
+Sleep(200);
+; set eng keyboard
+_SetKeyboardLayout("00000409", $hWnd)
+Sleep(200);
 Local $imageScale = 100;
 Local $projectDir = $CmdLine[1] & "\temp\img_exported";
 Sleep(200);
@@ -17,6 +21,21 @@ exportItem("#0|#8", "");
 ;~ exportLayer("#0|#8|#0", "01-Business");
 ; export AA layer
 ;~ exportLayer("#0|#8|#1", "02-Application");
+
+Func _GetKeyboardLayout($hWnd)
+    Local $ret = DllCall("user32.dll", "long", "GetWindowThreadProcessId", "hwnd", $hWnd, "ptr", 0)
+          $ret = DllCall("user32.dll", "long", "GetKeyboardLayout", "long", $ret[0])
+          Return "0000" & Hex($ret[0], 4)
+EndFunc
+
+Func _SetKeyboardLayout($sLayoutID, $hWnd)
+    Local $WM_INPUTLANGCHANGEREQUEST = 0x50
+    Local $ret = DllCall("user32.dll", "long", "LoadKeyboardLayout", "str", $sLayoutID, "int", 0)
+    DllCall("user32.dll", "ptr", "SendMessage", "hwnd", $hWnd, _
+                                                "int", $WM_INPUTLANGCHANGEREQUEST, _
+                                                "int", 1, _
+                                                "int", $ret[0])
+EndFunc
 
 Func exportItem($itemID, $pathName)
 	Local $itemCount = ControlTreeView($hWnd, "", "[CLASS:SysTreeView32; INSTANCE:1]", "GetItemCount", $itemID);
@@ -62,11 +81,18 @@ Func exportImage($itemID, $itemName)
 	Send("!fe{UP}{ENTER}");
 	; fill export data
 	;~ Sleep(2000);
-	Send("^a{DEL}");
-	Send($projectDir & $itemName & ".png");
+    Send("^a{DEL}");
+    
+    ; PNG
+    Send($projectDir & $itemName & ".png");
 	Send("{TAB}{TAB}{HOME} {DOWN} {DOWN} {DOWN}");
 	Send("{TAB}" & $imageScale);
-	;~ Sleep(2000);
 	Send("{ENTER}{ENTER}");
-	Sleep(500);
+    
+    ; SVG
+	;Send($projectDir & $itemName & ".svg");
+    ;Send("{TAB}{TAB}{HOME} {DOWN} {DOWN} {DOWN} {DOWN}");
+    ;Send("^{ENTER}{ENTER}");
+    
+    Sleep(500);
 EndFunc
