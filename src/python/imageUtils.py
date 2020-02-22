@@ -3,7 +3,7 @@ import cv2
 
 def convertImage(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    thresh = cv2.threshold(gray, 120, 255, cv2.THRESH_BINARY_INV)[1]
+    thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY_INV)[1]
     # edges = cv2.Canny(gray,100,200)
     # blur = cv2.blur(edges,(4,4))
     # cv2.imshow(cv2.namedWindow("addIcons"), gray)

@@ -7,6 +7,12 @@ import numpy as np
 import rectRecognition as rr
 import imageUtils
 
+# if the distance between two points is smaller than this, continue in line
+REALLY_SMALL_GAP   = 3
+# shorter lines are not line
+MIN_SEGMENT_LENGTH = 30
+# rounded rectangles
+CORNER_GAP         = 15
 
 def copyImage(imageSourcePath, imageDestPath):
     # print('  copy from', imageSourcePath, 'to', imageDestPath)
@@ -45,8 +51,16 @@ def addIcons2image(imageSourcePath, imageRectanglePath, imageReleasePath, iconDe
     # save BW image
     # cv2.imwrite(imageRectanglePath[:-4] + '_BW' + imageRectanglePath[-4:], imgBW)
     # identify rectangles
-    lineSegmentsHorizontal, lineSegmentsVertical = rr.findLineSegments(imgBW, 6, 30)
-    rectangles = rr.findRectangles(lineSegmentsHorizontal, lineSegmentsVertical, 10)
+    lineSegmentsHorizontal, lineSegmentsVertical = rr.findLineSegments(imgBW, REALLY_SMALL_GAP, MIN_SEGMENT_LENGTH)
+    # print('HORIZONTAL')
+    # for y in sorted(lineSegmentsHorizontal.keys()):
+    #     print(y)
+    #     for x in lineSegmentsHorizontal[y]:
+    #         print(x)
+    # # print(lineSegmentsHorizontal)
+    # print('VERTICAL')
+    # print(lineSegmentsVertical)
+    rectangles = rr.findRectangles(lineSegmentsHorizontal, lineSegmentsVertical, CORNER_GAP)
 
     # add rectangles into img
     writeRectangles2Image(img, rectangles, imageRectanglePath)
@@ -71,8 +85,9 @@ def addIcons2image(imageSourcePath, imageRectanglePath, imageReleasePath, iconDe
 
 # read project dir from arguments
 if (len(sys.argv) < 2):
-    print('usage: generateUMLETimages.py projectPath')
-    exit(1)
+    print('usage: addIcons.py projectPath')
+    projectDir = os.path.normpath('C:/Projects_src/Work/MoJ/cpp')
+    # exit(1)
 else:
     projectDir = os.path.normpath(sys.argv[1])
 

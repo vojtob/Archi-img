@@ -3,6 +3,8 @@ import numpy as np
 
 def addPointToSegments(lineSegments, keyCoordinate, lenCoordinate, reallySmallGap, minSegmentLength):
     """ add a point to segments """
+
+    # try to add point into existing segments
     if(lineSegments.get(keyCoordinate)):
         # there is a segment with key coordinate equal to keyCoordinate
         segments = lineSegments[keyCoordinate]
@@ -10,25 +12,29 @@ def addPointToSegments(lineSegments, keyCoordinate, lenCoordinate, reallySmallGa
         s = segments.pop()
         # check how close is the point to the last segment
         if( (lenCoordinate-s[1]) <= reallySmallGap ):
-            # the point is too close to the last segment, we prolong this segment (poped element replaced with longer)
+            # the point is realy close to the last segment, we prolong this segment (poped element replaced with longer)
             segments.append((s[0],lenCoordinate))
         else:
             # the point is too far from previous segment
+
             # check, if the previous segment is long enough
             if( (s[1]-s[0]) > minSegmentLength ):
                 # last segment is long enough, we should return it back to list (removed by pop)
                 segments.append(s)
-            # we should create a new segment, only one point long
-            segments.append((lenCoordinate,lenCoordinate))
+
+            # the point must be added into a new segment, only one point long
+            lineSegments[keyCoordinate].append((lenCoordinate,lenCoordinate))
     else:
-         # the very first segment for this key coordinate, create list of segments and a new segment       
-         segments = []
-         segments.append((lenCoordinate,lenCoordinate))
-         lineSegments[keyCoordinate] = segments
+        # the very first segment for this key coordinate, create list of segments and a new segment       
+        segments = []
+        segments.append((lenCoordinate,lenCoordinate))
+        lineSegments[keyCoordinate] = segments
 
 def removeShortSegments(lineSegments, minSegmentLength):
     emptyList = []
     for keyCoordinate, segments in lineSegments.items():
+        if (len(segments) == 0):
+            print('!!!!!!!!!!!!', keyCoordinate)
         s = segments[-1]
         if( (s[1]-s[0]) < minSegmentLength ):
             segments.pop()
@@ -36,6 +42,33 @@ def removeShortSegments(lineSegments, minSegmentLength):
             emptyList.append(keyCoordinate)
     for keyCoordinate in emptyList:
         lineSegments.pop(keyCoordinate)
+
+def merge_similar_segments(line_segments, similar_length):
+    """if two there are two almoust similar segments, remove shorter"""
+
+    emptyList = []
+
+    for y in sorted(line_segments.keys()):
+        if(len(line_segments[y]) < 1):
+            emptyList.append(y)
+
+        if(not line_segments.get(y+1)):
+            continue
+
+        segments = line_segments[y]
+        next_segments = line_segments[y+1]
+
+        for i_s, s in enumerate(list(segments)):
+            for i_n, n in enumerate(list(next_segments)):
+                if(((s[1]+similar_length) < n[0]) or ((n[1]+similar_length) < s[0])):
+                    continue # segment do not overlap
+                # merge
+                segments.pop(i_s)
+                segments.insert(i_s, (min(s[0],n[0]),max(s[1],n[1])))
+                next_segments.pop(i_n)
+
+    for y in emptyList:
+        line_segments.pop(y)
 
 def findLineSegments(img, reallySmallGap, minSegmentLength):
     """find line segments with minimal length"""
@@ -57,10 +90,18 @@ def findLineSegments(img, reallySmallGap, minSegmentLength):
                 # here is a point that should be added to segments
                 addPointToSegments(lineSegmentsHorizontal, y, x, reallySmallGap, minSegmentLength)
                 addPointToSegments(lineSegmentsVertical, x, y, reallySmallGap, minSegmentLength)
+    # for y in range(maxY):
+    #     for x in range(maxX):
+    #         # opencv coordinate system is (row,col), therefore swith x-y
+    #         if(img[y,x]):
+    #             # here is a point that should be added to segments
+    #             addPointToSegments(lineSegmentsHorizontal, y, x, reallySmallGap, minSegmentLength)
 
     # check segments for length
     removeShortSegments(lineSegmentsHorizontal, minSegmentLength)
     removeShortSegments(lineSegmentsVertical, minSegmentLength)
+    merge_similar_segments(lineSegmentsHorizontal, reallySmallGap)
+    merge_similar_segments(lineSegmentsVertical, reallySmallGap)
 
     return lineSegmentsHorizontal, lineSegmentsVertical
 
