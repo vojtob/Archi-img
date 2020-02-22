@@ -59,13 +59,16 @@ def merge_similar_segments(line_segments, similar_length):
         next_segments = line_segments[y+1]
 
         for i_s, s in enumerate(list(segments)):
+            remove_elements = set()
             for i_n, n in enumerate(list(next_segments)):
                 if(((s[1]+similar_length) < n[0]) or ((n[1]+similar_length) < s[0])):
                     continue # segment do not overlap
                 # merge
                 segments.pop(i_s)
                 segments.insert(i_s, (min(s[0],n[0]),max(s[1],n[1])))
-                next_segments.pop(i_n)
+                remove_elements.add(i_n)
+            for i in sorted(remove_elements, reverse=True):
+                next_segments.pop(i)
 
     for y in emptyList:
         line_segments.pop(y)
