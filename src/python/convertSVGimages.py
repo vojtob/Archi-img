@@ -22,7 +22,7 @@ else:
                     #print('create directory', dest_file_dir)
                     os.makedirs(dest_file_dir)
                 print('convert SVG file', f)
-                cmd = os.environ['IM_HOME'] + '/convert.exe  -density 144 ' + orig_file_path + ' ' + dest_file_path
+                cmd = os.environ['IM_HOME'] + '/magick  -density 144 ' + orig_file_path + ' ' + dest_file_path
                 # print(cmd)
                 subprocess.run(cmd, shell=False)
 

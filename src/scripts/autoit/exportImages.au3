@@ -5,7 +5,9 @@ Sleep(200);
 _SetKeyboardLayout("00000409", $hWnd)
 Sleep(200);
 Local $imageScale = 100;
-Local $projectDir = $CmdLine[1] & "\temp\img_exported";
+Local $project_dir_png = $CmdLine[1] & "\temp\img_exported";
+Local $project_dir_svg = $CmdLine[1] & "\temp\img_exported_svg";
+Local $project_dir = $project_dir_svg;
 Sleep(200);
 
 ; export ALL
@@ -57,7 +59,7 @@ EndFunc
 
 Func exportLayer($layerID, $layerName)
 	If ($layerName <> "" ) Then
-		DirCreate($projectDir & $layerName);
+		DirCreate($project_dir & $layerName);
 	EndIf;
 	Local $itemCount = ControlTreeView($hWnd, "", "[CLASS:SysTreeView32; INSTANCE:1]", "GetItemCount", $layerID);
 	For $i = 0 To ($itemCount-1) Step 1
@@ -84,15 +86,15 @@ Func exportImage($itemID, $itemName)
     Send("^a{DEL}");
     
     ; PNG
-    Send($projectDir & $itemName & ".png");
-	Send("{TAB}{TAB}{HOME} {DOWN} {DOWN} {DOWN}");
-	Send("{TAB}" & $imageScale);
-	Send("{ENTER}{ENTER}");
+    ;Send($project_dir_png & $itemName & ".png");
+	;Send("{TAB}{TAB}{HOME} {DOWN} {DOWN} {DOWN}");
+	;Send("{TAB}" & $imageScale);
+	;Send("{ENTER}{ENTER}");
     
     ; SVG
-	;Send($projectDir & $itemName & ".svg");
-    ;Send("{TAB}{TAB}{HOME} {DOWN} {DOWN} {DOWN} {DOWN}");
-    ;Send("^{ENTER}{ENTER}");
+	Send($project_dir_svg & $itemName & ".svg");
+    Send("{TAB}{TAB}{HOME} {DOWN} {DOWN} {DOWN} {DOWN}");
+    Send("^{ENTER}{ENTER}");
     
     Sleep(500);
 EndFunc
