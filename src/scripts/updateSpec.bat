@@ -7,5 +7,3 @@ robocopy /np /nfl /njh /njs /ndl /nc /ns %PROJECT_DIR%\src\specifikacia %SPEC_DI
 REM ******** Copy images to documentation
 @set IMG_DIR=%SPEC_DIR%\static\img
 robocopy /np /nfl /njh /njs /ndl /nc /ns %PROJECT_DIR%\release\img %IMG_DIR% /E
-
-call %PROJECT_DIR%\utils\specGenerator.bat %PROJECT_DIR%

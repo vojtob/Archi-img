@@ -127,7 +127,7 @@ def findVerticalEdge(startX, startY, cornerGap, lineSegmentsVertical):
                 # too low
                 # return None
                 break
-            return edge
+            return (x, edge)
 
 def findBottomEdge(startX, endX, startY, cornerGap, lineSegmentsHorizontal):
     yKeys = lineSegmentsHorizontal.keys()
@@ -157,7 +157,7 @@ def findBottomEdge(startX, endX, startY, cornerGap, lineSegmentsHorizontal):
                 # too big
                 # return None
                 break
-            return edge
+            return (y, edge)
 
 def findRectangles(lineSegmentsHorizontal, lineSegmentsVertical, cornerGap):
     rectangles = []
@@ -177,10 +177,12 @@ def findRectangles(lineSegmentsHorizontal, lineSegmentsVertical, cornerGap):
                 # right edge not found
                 continue
             # try to find bottom edge
-            bottomEdge = findBottomEdge(topEdge[0], topEdge[1], (leftEdge[1]+rightEdge[1])//2, cornerGap, lineSegmentsHorizontal)
+            bottomEdge = findBottomEdge(topEdge[0], topEdge[1], (leftEdge[1][1]+rightEdge[1][1])//2, cornerGap, lineSegmentsHorizontal)
             if(not bottomEdge):
                 continue
             # we found a rectangle
-            rectangles.append( ( (topEdge[0],leftEdge[0]), (bottomEdge[1],rightEdge[1]) )  ) 
+            tl = ( min(leftEdge[0], topEdge[0], bottomEdge[1][0] ), min(y, leftEdge[1][0], rightEdge[1][0]) )
+            br = ( max(rightEdge[0], topEdge[1], bottomEdge[1][1] ), max(bottomEdge[0], leftEdge[1][1], rightEdge[1][1]) )
+            rectangles.append( (tl, br)  ) 
 
     return rectangles

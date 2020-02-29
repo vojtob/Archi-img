@@ -75,7 +75,7 @@ GOTO DONE
 :GENERATESPECIFICATION
 ECHO Generate specification resources
 @ECHO ON
-@call C:\prg\docool\scripts\generateSpec.bat %PROJECT_DIR%
+@call %PROJECT_DIR%\utils\generateSpec.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE
 
