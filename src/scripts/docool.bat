@@ -53,7 +53,7 @@ GOTO DONE
 :ICONS
 ECHO Add icons to archimate images based on images.json
 @ECHO ON
-call C:\Projects_src\Personal\Archi-img\src\python\addIcons.py %PROJECT_DIR%
+call C:\Projects_src\Personal\Archi-img\src\python\addIcons.py %PROJECT_DIR% %3 %4 %5
 REM @call C:\prg\docool\scripts\addIcons.bat %PROJECT_DIR%
 @ECHO OFF
 GOTO DONE

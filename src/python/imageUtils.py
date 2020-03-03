@@ -11,8 +11,9 @@ def convertImage(img):
     return thresh
 
 def overlayImageOverImage(bigImg, smallImage, smallImageOrigin):
+    # print('overlay bigSize: {0[0]}x{0[1]}  iconSize: {1[0]}x{1[1]}  placement: {2[0]}x{2[1]}'.format(bigImg.shape, smallImage.shape, smallImageOrigin))
     x1 = smallImageOrigin[0]
-    x2 = x1 + smallImage.shape[0]
+    x2 = x1 + smallImage.shape[1]
     y1 = smallImageOrigin[1]
     y2 = y1 + smallImage.shape[0]
 
@@ -26,19 +27,25 @@ def overlayImageOverImage(bigImg, smallImage, smallImageOrigin):
 
 def addIcon2Image(img, rectangle, iconFilePath, iconSize, xAlign, yAlign, marginSize=5):
     icon = cv2.imread(iconFilePath, cv2.IMREAD_UNCHANGED)
-    icon = cv2.resize(icon, (iconSize,iconSize))
+    s = max(icon.shape[0], icon.shape[1])
+    dy = int((iconSize*icon.shape[0])/s)
+    dx = int((iconSize*icon.shape[1])/s)
+    # print('rezise from {0[0]}x{0[1]} to {1}x{2}'.format(icon.shape, dy, dx))
+    # print('icon orig size {0[0]}x{0[1]}'.format(icon.shape))
+    icon = cv2.resize(icon, (dx,dy))
+    # print('icon dest size {0[0]}x{0[1]}'.format(icon.shape))
 
     # calculate x position of icon
     if(xAlign == 'left'):
         x = rectangle[0][0] + marginSize
     elif(xAlign == 'right'):
-        x = rectangle[1][0] - iconSize - marginSize
+        x = rectangle[1][0] - dx - marginSize
     elif (xAlign == 'center'):
-        x = (rectangle[1][0]+rectangle[0][0]-iconSize) // 2
+        x = (rectangle[1][0]+rectangle[0][0]-dx) // 2
     else:
         # relative
         try:
-            x = int( (1-xAlign)*rectangle[0][0] + xAlign*rectangle[1][0] - iconSize/2 )
+            x = int( (1-xAlign)*rectangle[0][0] + xAlign*rectangle[1][0] - dx/2 )
         except:
             print('       icon x align bad format !!!!!!!')
             return
@@ -47,14 +54,14 @@ def addIcon2Image(img, rectangle, iconFilePath, iconSize, xAlign, yAlign, margin
     if(yAlign == 'top'):
         y = rectangle[0][1] + marginSize
     elif(yAlign == 'bottom'):
-        y = rectangle[1][1] - iconSize - marginSize
+        y = rectangle[1][1] - dy - marginSize
     elif (yAlign == 'center'):
-        y = (rectangle[1][1]+rectangle[0][1]-iconSize) // 2
+        y = (rectangle[1][1]+rectangle[0][1]-dy) // 2
     else:
         # relative
         try:
             pass
-            y = int( (1-yAlign)*rectangle[0][1] + yAlign*rectangle[1][1] - iconSize/2 )
+            y = int( (1-yAlign)*rectangle[0][1] + yAlign*rectangle[1][1] - dy/2 )
         except:
             print('       icon y align bad format !!!!!!!!')
             return

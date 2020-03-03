@@ -83,6 +83,28 @@ def addIcons2image(imageSourcePath, imageRectanglePath, imageReleasePath, iconDe
         os.makedirs(imageDir)
     cv2.imwrite(imageReleasePath, img)
 
+def processFile(dirpath, filename):
+    """if there is imageDef then add icons to image
+       else copy image do release"""
+
+    print('processFile', dirpath, filename)
+
+    imageRelativeDir = os.path.relpath(dirpath,imagesSourceDir)
+
+    imageRelativePath = os.path.join(imageRelativeDir, filename)
+    imageSourcePath = os.path.join(imagesSourceDir, imageRelativePath)
+    imageRectanglePath = os.path.join(imagesRectanglesDir, imageRelativePath)
+    imageReleasePath = os.path.join(imagesReleaseDir, imageRelativePath)
+
+    defs = [imageDef for imageDef in imageDefs if os.path.normpath(imageDef['fileName'])==imageRelativePath]
+    if(len(defs)):
+        print('add icons to file', imageRelativePath)
+        addIcons2image(imageSourcePath, imageRectanglePath, imageReleasePath, defs[0]['icons'], iconsDir)
+    else:
+        print('copy file', imageRelativePath)
+        copyImage(imageSourcePath, imageReleasePath)
+
+
 # read project dir from arguments
 if (len(sys.argv) < 2):
     print('usage: addIcons.py projectPath')
@@ -101,25 +123,17 @@ imagesRectanglesDir = os.path.join(projectDir, 'temp', 'img_rec')
 imagesReleaseDir = os.path.join(projectDir, 'release', 'img')
 iconsDir = os.path.join(projectDir, 'src', 'res', 'icons')
 
-# go throug all exported files
-# if there is imageDef then add icons to image
-# else copy image do release
-for (dirpath, dirnames, filenames) in os.walk(imagesSourceDir):
-    imageRelativeDir = os.path.relpath(dirpath,imagesSourceDir)
-
-    for f in filenames:
-        imageRelativePath = os.path.join(imageRelativeDir, f)
-        imageSourcePath = os.path.join(imagesSourceDir, imageRelativePath)
-        imageRectanglePath = os.path.join(imagesRectanglesDir, imageRelativePath)
-        imageReleasePath = os.path.join(imagesReleaseDir, imageRelativePath)
-
-        defs = [imageDef for imageDef in imageDefs if os.path.normpath(imageDef['fileName'])==imageRelativePath]
-        if(len(defs)):
-            print('add icons to file', imageRelativePath)
-            addIcons2image(imageSourcePath, imageRectanglePath, imageReleasePath, defs[0]['icons'], iconsDir)
-        else:
-            print('copy file', imageRelativePath)
-            copyImage(imageSourcePath, imageReleasePath)
-
-
+if (len(sys.argv) >= 3):
+    filepath = sys.argv[2]
+    i = filepath.rfind('/')
+    if(i == -1):
+        processFile(imagesSourceDir,filepath)
+    else:
+        processFile(os.path.join(imagesSourceDir, filepath[:i]), filepath[i+1:])
+else:
+    # go throug all exported files
+    for (dirpath, dirnames, filenames) in os.walk(imagesSourceDir):
+        for f in filenames:
+            processFile(dirpath, f)
+  
 print('DONE addIcons.py')
