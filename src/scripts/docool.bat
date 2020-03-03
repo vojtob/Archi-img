@@ -28,7 +28,7 @@ ECHO.
 ECHO commands:
 ECHO    archi    - export images from archi model to png
 ECHO    img      - generate mermaid, umlet images
-ECHO    icons    - add icons to images
+ECHO    icons [filename]   - add icons to images
 ECHO    -----------------------------------------
 ECHO    spec           - create specification
 ECHO    specUpdate     - update specification content
