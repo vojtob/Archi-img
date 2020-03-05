@@ -1,5 +1,13 @@
 import cv2
 import numpy as np
+import imageUtils
+
+# if the distance between two points is smaller than this, continue in line
+REALLY_SMALL_GAP   = 3
+# shorter lines are not line
+MIN_SEGMENT_LENGTH = 30
+# rounded rectangles
+CORNER_GAP         = 15
 
 def addPointToSegments(lineSegments, keyCoordinate, lenCoordinate, reallySmallGap, minSegmentLength):
     """ add a point to segments """
@@ -185,4 +193,27 @@ def findRectangles(lineSegmentsHorizontal, lineSegmentsVertical, cornerGap):
             br = ( max(rightEdge[0], topEdge[1], bottomEdge[1][1] ), max(bottomEdge[0], leftEdge[1][1], rightEdge[1][1]) )
             rectangles.append( (tl, br)  ) 
 
+    return rectangles
+
+def getRectangles(imageSourcePath):
+    img = cv2.imread(imageSourcePath, cv2.IMREAD_UNCHANGED)
+
+    # convert to BW
+    imgBW =imageUtils.convertImage(img)
+    # save BW image
+    # cv2.imwrite(imageRectanglePath[:-4] + '_BW' + imageRectanglePath[-4:], imgBW)
+
+    # identify rectangles
+    lineSegmentsHorizontal, lineSegmentsVertical = findLineSegments(imgBW, REALLY_SMALL_GAP, MIN_SEGMENT_LENGTH)
+
+    # print('HORIZONTAL')
+    # for y in sorted(lineSegmentsHorizontal.keys()):
+    #     print(y)
+    #     for x in lineSegmentsHorizontal[y]:
+    #         print(x)
+    # # print(lineSegmentsHorizontal)
+    # print('VERTICAL')
+    # print(lineSegmentsVertical)
+
+    rectangles = findRectangles(lineSegmentsHorizontal, lineSegmentsVertical, CORNER_GAP)
     return rectangles
