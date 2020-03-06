@@ -9,6 +9,7 @@ ECHO.
 if "%~2"=="" goto BLANK
 IF "%~2"=="archi" GOTO ARCHI
 IF "%~2"=="icons" GOTO ICONS
+IF "%~2"=="areas" GOTO AREAS
 IF "%~2"=="img" GOTO IMAGES
 IF "%~2"=="spec" GOTO SPECIFICATION
 IF "%~2"=="generateSpec" GOTO GENERATESPECIFICATION
@@ -29,6 +30,7 @@ ECHO commands:
 ECHO    archi    - export images from archi model to png
 ECHO    img      - generate mermaid, umlet images
 ECHO    icons [filename]   - add icons to images
+ECHO    areas    - add images with focused areas
 ECHO    -----------------------------------------
 ECHO    spec           - create specification
 ECHO    specUpdate     - update specification content
@@ -54,7 +56,13 @@ GOTO DONE
 ECHO Add icons to archimate images based on images.json
 @ECHO ON
 call C:\Projects_src\Personal\Archi-img\src\python\addIcons.py %PROJECT_DIR% %3 %4 %5
-REM @call C:\prg\docool\scripts\addIcons.bat %PROJECT_DIR%
+@ECHO OFF
+GOTO DONE
+
+:AREAS
+ECHO Generate images with focused areas based on img_focus.json
+@ECHO ON
+call C:\Projects_src\Personal\Archi-img\src\python\imagefocus.py %PROJECT_DIR% %3 %4 %5
 @ECHO OFF
 GOTO DONE
 
