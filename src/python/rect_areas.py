@@ -36,17 +36,23 @@ def getopposite(direction):
     if direction == RIGHT:
         return LEFT
 
-def get_collision_edge(edge, edgename, edgedir):
+def get_collision_edge(edge, edgename, edgedir, lastpoint):
     """edge that is prolonged by GAP to collide with nearby reactangle. 
     Moreover it is shifted away by GAP to not interfere with aligned rectangle and to collide with other rectangle"""
+
     if (edgename==UP) or (edgename == LEFT):
         collision_shift = edge[0] - AREA_GAP
     else:
         collision_shift = edge[0] + AREA_GAP
-    if (edgedir == LEFT) or (edgedir == UP):
-        return (collision_shift, edge[1] - AREA_GAP, edge[2])
+
+    if edgedir == LEFT:
+        return (collision_shift, edge[1] - AREA_GAP, lastpoint[0])
+    elif edgedir == RIGHT:
+        return (collision_shift, lastpoint[0], edge[2] + AREA_GAP)
+    elif edgedir == UP:
+        return (collision_shift, edge[1] - AREA_GAP, lastpoint[1])
     else:
-        return (collision_shift, edge[1], edge[2] + AREA_GAP)
+        return (collision_shift, lastpoint[1], edge[2] + AREA_GAP)
 
 def get_collision_point(origedge, edgename, edgedir, collidingedge):
     if edgedir==DOWN:
@@ -69,9 +75,9 @@ def get_collision_point(origedge, edgename, edgedir, collidingedge):
 
     return (x,y)
 
-def turn_after_collision(rectangles, edge, edgename, edgedir):
+def turn_after_collision(rectangles, lastpoint, edge, edgename, edgedir):
     # create border_edge = prolong edge in direction and shift it slightly away from edge   
-    border = get_collision_edge(edge, edgename, edgedir)
+    border = get_collision_edge(edge, edgename, edgedir, lastpoint)
 
     for r in rectangles:
         # potentional collision edge
@@ -149,8 +155,8 @@ def find_start_rect(rectangles):
             start_rect = r
     return start_rect
 
-def go2nextpoint(rectangles, edge, edgename, edgedir):
-    collision = turn_after_collision(rectangles,  edge, edgename, edgedir)
+def go2nextpoint(rectangles, lastpoint, edge, edgename, edgedir):
+    collision = turn_after_collision(rectangles, lastpoint, edge, edgename, edgedir)
     # try to find collision with another rectangle
     if collision is not None:
         return (collision[0], collision[1], collision[2][0], collision[2][1])
@@ -178,6 +184,6 @@ def find_traverse_points(area_rectangles):
     while is_traverse(traverse[0], startpoint):
         if traverse[0] is not None:
             points.append(traverse[0])
-        traverse = go2nextpoint(area_rectangles, traverse[1], traverse[2], traverse[3])
+        traverse = go2nextpoint(area_rectangles, points[-1], traverse[1], traverse[2], traverse[3])
     
     return points

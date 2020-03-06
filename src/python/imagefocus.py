@@ -19,7 +19,7 @@ def drawarea(polygons, imagepath, imagedestpath):
         # draw red polygon
         img = cv2.polylines(img, [points], True, (0,0,255), 2)
         # use mask to set transparency
-        mask = cv2.fillConvexPoly(mask, points, 255)
+        mask = cv2.fillPoly(mask, [points], 255)
 
     img[:, :, 3] = mask
     cv2.imwrite(imagedestpath, img)

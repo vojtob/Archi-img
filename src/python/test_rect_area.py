@@ -29,30 +29,32 @@ class TestImageFocus(unittest.TestCase):
         self.assertEqual(ra.get_edge(r, ra.LEFT), edgel)
 
     def test_collision_edge(self):
-        e = ra.get_edge(self.r1, ra.RIGHT)
-        ce = ra.get_collision_edge(e, ra.RIGHT, ra.DOWN)
-        self.assertEqual((e[0]+ra.AREA_GAP, e[1], e[2]+ra.AREA_GAP), ce)
+        e = (614, 1034, 1484)
+        p = (1012, 606)
+        ce = ra.get_collision_edge(e, ra.UP, ra.RIGHT, p)
+        self.assertEqual((e[0]-ra.AREA_GAP, 1012, 1484+ra.AREA_GAP), ce)
 
-        e = ra.get_edge(self.r3, ra.DOWN)
-        ce = ra.get_collision_edge(e, ra.DOWN, ra.LEFT)
-        self.assertEqual((e[0]+ra.AREA_GAP, e[1]-ra.AREA_GAP, e[2]), ce)
+        e = (1514, 14, 1169)
+        p = (1514-ra.AREA_BORDER, 614-ra.AREA_BORDER)
+        ce = ra.get_collision_edge(e, ra.LEFT, ra.UP, p)
+        self.assertEqual((e[0]-ra.AREA_GAP, e[1]-ra.AREA_GAP, p[1]), ce)
 
-        cp = ra.get_collision_point(ra.get_edge(self.r1, ra.RIGHT), ra.RIGHT, ra.DOWN, ra.get_edge(self.r3, ra.UP))
-        self.assertEqual(cp, (self.r1[1][0]+ra.AREA_BORDER, self.r3[0][1]-ra.AREA_BORDER))
+    #     cp = ra.get_collision_point(ra.get_edge(self.r1, ra.RIGHT), ra.RIGHT, ra.DOWN, ra.get_edge(self.r3, ra.UP))
+    #     self.assertEqual(cp, (self.r1[1][0]+ra.AREA_BORDER, self.r3[0][1]-ra.AREA_BORDER))
 
-    def test_collision(self):
-        rectangles = [self.r1, self.r2, self.r3]
-        self.assertEqual(ra.turn_after_collision(rectangles, ra.get_edge(self.r1, ra.UP), ra.UP, ra.RIGHT), None)
+    # def test_collision(self):
+    #     rectangles = [self.r1, self.r2, self.r3]
+    #     self.assertEqual(ra.turn_after_collision(rectangles, ra.get_edge(self.r1, ra.UP), ra.UP, ra.RIGHT), None)
 
-        collision = ra.turn_after_collision(rectangles, ra.get_edge(self.r1, ra.RIGHT), ra.RIGHT, ra.DOWN)
-        self.assertEqual(collision[0], (self.r1[1][0]+ra.AREA_BORDER, self.r3[0][1]-ra.AREA_BORDER), msg='collision point')
-        self.assertEqual(collision[1], ra.get_edge(self.r3, ra.UP), msg='collision next edge')
-        self.assertEqual(collision[2], (ra.UP, ra.RIGHT), msg='collision next edge name-direction')
+    #     collision = ra.turn_after_collision(rectangles, ra.get_edge(self.r1, ra.RIGHT), ra.RIGHT, ra.DOWN)
+    #     self.assertEqual(collision[0], (self.r1[1][0]+ra.AREA_BORDER, self.r3[0][1]-ra.AREA_BORDER), msg='collision point')
+    #     self.assertEqual(collision[1], ra.get_edge(self.r3, ra.UP), msg='collision next edge')
+    #     self.assertEqual(collision[2], (ra.UP, ra.RIGHT), msg='collision next edge name-direction')
         
-        collision = ra.turn_after_collision(rectangles, ra.get_edge(self.r3, ra.DOWN), ra.DOWN, ra.LEFT)
-        self.assertEqual(collision[0], (self.r1[1][0]+ra.AREA_BORDER, self.r3[1][1]+ra.AREA_BORDER), msg='collision point')
-        self.assertEqual(collision[1], ra.get_edge(self.r2, ra.RIGHT), msg='collision next edge')
-        self.assertEqual(collision[2], (ra.RIGHT, ra.DOWN), msg='collision next edge name-direction')
+    #     collision = ra.turn_after_collision(rectangles, ra.get_edge(self.r3, ra.DOWN), ra.DOWN, ra.LEFT)
+    #     self.assertEqual(collision[0], (self.r1[1][0]+ra.AREA_BORDER, self.r3[1][1]+ra.AREA_BORDER), msg='collision point')
+    #     self.assertEqual(collision[1], ra.get_edge(self.r2, ra.RIGHT), msg='collision next edge')
+    #     self.assertEqual(collision[2], (ra.RIGHT, ra.DOWN), msg='collision next edge name-direction')
 
     def test_continue_on(self):
         rectangles = [self.r1, self.r2, self.r3]
@@ -84,6 +86,13 @@ class TestImageFocus(unittest.TestCase):
             addpoint(r65[1],(b,b)), 
             addpoint((r64[0][0], r64[1][1]),(-b,b))]
         self.assertEqual(points, mypoints, 'tools area')
+
+        r50 = ((554, 764), (1004, 1004)) 
+        r43 = ((1034, 614), (1484, 884)) 
+        r14 = ((554, 179), (1004, 734))          
+        r5 = ((1514, 14), (1799, 1169))  
+        points = ra.find_traverse_points([r50,r43,r14,r5])
+        self.assertEqual(len(points), 12, 'CM area length')
 
 
         
